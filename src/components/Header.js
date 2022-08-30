@@ -10,8 +10,12 @@ function Header(props) {
 
             <NavigationMenu>
                 <a href="/home">
+
                     <img src={"/images/home-icon.svg"} alt="Home"/>
-                    <span>Home</span>
+
+                    <span>
+                             Home
+                    </span>
                 </a>
 
             </NavigationMenu>
@@ -59,8 +63,9 @@ const NavigationMenu=styled.div`
       display: flex;
       align-items: center;
       flex-flow: nowrap;
-      height: 100%;
-      margin: 0px;
+      height: 50%;
+      width: 50%;
+     
       padding: 0;
       position: relative;
       margin-right: auto;
@@ -69,24 +74,27 @@ const NavigationMenu=styled.div`
   a{
     display: flex;
     align-items: center;
-    padding: 0 12px;
+    padding: 0px 12px;
   }
+  
   image{
-    height: 15px;
-    min-width: 20px;
-    width: 15px;
-    z-index: auto;
     
   }
+ 
   
   span{
     color: rgb(249,249,249);
     font-size: 13px;
+    text-align: center;
+    bottom: -5px;
     letter-spacing: 1.4px;
     line-height: 1px;
     padding: 2px 0px;
     position: relative;
     white-space: nowrap;
+   
+
+  
  
   
   &:before{
@@ -132,7 +140,7 @@ const NavigationMenu=styled.div`
   
   &:hover{
     span:before{
-      transform: scaleX(1);
+      transform: scaleX(1.2);
       visibility: visible;
       opacity: 1 !important;
       
