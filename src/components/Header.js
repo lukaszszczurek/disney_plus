@@ -1,15 +1,22 @@
 import React from 'react';
 import styled from "styled-components";
 import {auth, provider} from "../firebase.js";
+import {signInWithPopup} from "firebase/auth"
 
-require('firebase/auth')
+
+
+// require('firebase/auth')
 
 function Header(props) {
+
+
     const handleAuth=()=>{
-        auth.signInWithPopup(provider).then((result)=>{
+       signInWithPopup(auth,provider).then((result)=>{
             console.log(result)
         }).catch((error)=>{
+            console.log("Hi")
             alert(error.message)
+
         })
 
     };
