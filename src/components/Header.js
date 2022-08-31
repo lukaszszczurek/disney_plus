@@ -24,7 +24,28 @@ function Header(props) {
 
 
 
+                <a href={"watchlist"}>
+                    <img src="/images/watchlist-icon.svg" alt="WATCHLIST" />
+                    <span>WATCHLIST</span>
+                </a>
+                <a href={"originals"}>
+                    <img src="/images/original-icon.svg" alt="ORIGINALS" />
+                    <span>ORIGINALS</span>
+                </a>
+                <a href={"movies"}>
+                    <img src="/images/movie-icon.svg" alt="MOVIES" />
+                    <span>MOVIES</span>
+                </a>
+                <a href={"series"}>
+                    <img src="/images/series-icon.svg" alt="SERIES" />
+                    <span>SERIES</span>
+                </a>
+
+
+
             </NavigationMenu>
+
+            <LoginButton>Login</LoginButton>
 
 
 
@@ -140,10 +161,30 @@ width: auto;
     }
   }
 `;
-  //@media(max-width: 768px)
-  //{
+  // @media(max-width: 768px)
+  // {
   //  display: none;
-  //}
+  // }
+
+const LoginButton=styled.a`
+    letter-spacing: 1.4px;
+    font-size: 13px;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    border: 1px solid #f9f9f9;
+    border-radius: 4px;
+    
+  
+  &:hover{
+    
+    background-color: #f9f9f9;
+    color: #040714;
+    
+  }
+    
+
+
+`;
 
 
 
