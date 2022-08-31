@@ -1,7 +1,16 @@
 import React from 'react';
 import styled from "styled-components";
+import {auth, provider} from "../firebase.js";
 
 function Header(props) {
+    const handleAuth=()=>{
+        auth.signInWithPopup(provider).then((result)=>{
+            console.log(result)
+        }).catch((error)=>{
+            alert(error.message)
+        })
+
+    }
     return (
         <Nav>
             <Logo >
@@ -45,7 +54,7 @@ function Header(props) {
 
             </NavigationMenu>
 
-            <LoginButton>Login</LoginButton>
+            <LoginButton onClick={handleAuth}>Login</LoginButton>
 
 
 
@@ -168,7 +177,7 @@ width: auto;
 
 const LoginButton=styled.a`
     letter-spacing: 1.4px;
-    font-size: 13px;
+    font-size: 15px;
     text-transform: uppercase;
     padding: 8px 16px;
     border: 1px solid #f9f9f9;
@@ -179,6 +188,7 @@ const LoginButton=styled.a`
     
     background-color: #f9f9f9;
     color: #040714;
+    
     
   }
     
