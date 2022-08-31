@@ -1,4 +1,22 @@
-import firebase from "./firebase";
+
+import { initializeApp } from "firebase/app";
+import {
+ GoogleAuthProvider,
+ getAuth,
+ //  signInWithPopup,
+ // signInWithEmailAndPassword,
+ //  createUserWithEmailAndPassword,
+ //  sendPasswordResetEmail,
+ //  signOut,
+} from "firebase/auth";
+import {
+  getFirestore,
+ // query,
+ //  getDocs,
+ //  collection,
+ //  where,
+ //  addDoc,
+} from "firebase/firestore";
 
 
 
@@ -22,14 +40,20 @@ const firebaseConfig = {
 
 };
 
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const provider=GoogleAuthProvider;
 
+// const firebaseApp = firebase.initializeApp(firebaseConfig);
+//
+// const db = firebaseApp.firestore();
+// const auth = firebase.auth();
+// const provider = new firebase.auth.GoogleAuthProvider();
+// const storage = firebase.storage();
+//
+// export { auth, provider, storage };
+// export default db;
 
-const firebaseApp = firebase.initializeApp(firebaseConfig);
-
-const db = firebaseApp.firestore();
-const auth = firebase.auth();
-const provider = new firebase.auth.GoogleAuthProvider();
-const storage = firebase.storage();
-
-export { auth, provider, storage };
+export {auth,provider};
 export default db;

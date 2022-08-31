@@ -2,6 +2,8 @@ import React from 'react';
 import styled from "styled-components";
 import {auth, provider} from "../firebase.js";
 
+require('firebase/auth')
+
 function Header(props) {
     const handleAuth=()=>{
         auth.signInWithPopup(provider).then((result)=>{
@@ -10,7 +12,7 @@ function Header(props) {
             alert(error.message)
         })
 
-    }
+    };
     return (
         <Nav>
             <Logo >
