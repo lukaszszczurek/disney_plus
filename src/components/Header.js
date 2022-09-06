@@ -5,21 +5,55 @@ import {signInWithPopup} from "firebase/auth"
 
 
 
+//redux
+import {useDispatch,useSelector} from "react-redux";
+import { useNavigate} from "react-router-dom";
+
+
+//console.log(unstable_HistoryRouter);
+import {selectUsername, selectUserEmail, selectUserPhoto, setUserLoginDetails} from "./user/userSlice";
+
+
 // require('firebase/auth')
 
 function Header(props) {
+    console.log(useNavigate());
 
+
+    const dispatch=useDispatch();
+    const history=useNavigate();
+    const username=useSelector(selectUsername);
+    const photo=useSelector(selectUserPhoto);
+
+
+
+    const setUser=(user) => {
+
+        setUserLoginDetails({
+
+            name:user.displayName,
+            email:user.email,
+            photo:user.photoURL,
+        }
+
+
+        )
+
+    }
 
     const handleAuth=()=>{
        signInWithPopup(auth,provider).then((result)=>{
-            console.log(result)
+            console.log(result);
+            setUser(result.user);
         }).catch((error)=>{
-            console.log("Hi")
+
             alert(error.message)
 
         })
 
     };
+
+
     return (
         <Nav>
             <Logo >
