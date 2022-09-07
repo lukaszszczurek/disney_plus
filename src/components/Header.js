@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import styled from "styled-components";
 import {auth, provider} from "../firebase.js";
 import {signInWithPopup} from "firebase/auth"
@@ -7,26 +7,38 @@ import {signInWithPopup} from "firebase/auth"
 
 //redux
 import {useDispatch,useSelector} from "react-redux";
-import { useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 
 //console.log(unstable_HistoryRouter);
-import {selectUsername, selectUserEmail, selectUserPhoto, setUserLoginDetails} from "./user/userSlice";
+import {selectUsername, selectUserEmail, selectUserPhoto, setUserLoginDetails, setSignOutState} from "./user/userSlice";
 
 
 // require('firebase/auth')
 
-function Header(props) {
+ function Header(props) {
 
 
-    const [Logged,SetLogged]=useState(false);
+
 
     const dispatch=useDispatch();
     const history=useNavigate();
     const UserName=useSelector(selectUsername);
     const UserPhoto=useSelector(selectUserPhoto);
-    const [Logger,setLogger]=useState(false);
 
+
+
+    useEffect(()=>{
+
+        auth.onAuthStateChanged(async (user)=>{
+
+            if(user){
+                setUser(user);
+                history("/home");
+            }
+        })
+
+    },[UserPhoto]);
 
 
     const setUser=(user) => {
@@ -43,22 +55,29 @@ function Header(props) {
     };
 
     const handleAuth=()=>{
-        signInWithPopup(auth,provider).then((result)=>{
-            console.log(result);
-            setUser(result.user);
-            setLogger(true);
 
-        }).catch((error)=>{
+        if(UserPhoto){
+            signInWithPopup(auth,provider).then((result)=>{
+                console.log(result);
+                setUser(result.user);
 
-            alert(error.message)
 
-        })
+            }).catch((error)=>{
 
+                alert(error.message)
+            })
+
+        }
+        else if(!UserPhoto) {
+
+            auth.signOut().then(()=>{
+                dispatch(setSignOutState());
+                history("/");
+
+            }).catch((err)=>alert(err.message));
+        }
 
     }
-
-
-
 
     return (
         <Nav>
@@ -71,14 +90,14 @@ function Header(props) {
             {!UserPhoto ? (  <LoginButton onClick={handleAuth}>Login</LoginButton>
                 ):(
 
-                    //console.log("logging working")
+
                     <>
                             <NavigationMenu>
                             <a href="/home">
 
                                 <img src={"/images/home-icon.svg"} alt="Home"/>
 
-                                <span>Home</span>
+                                <span>HOME</span>
                             </a>
 
                             <a href={"/search"}>
@@ -104,13 +123,21 @@ function Header(props) {
                             </a>
 
                         </NavigationMenu>
-                                <UserImg src={UserPhoto} alt={UserName} />
+
+                                    <SignOut>
+                                        <UserImg src={UserPhoto} alt={UserName} />
+                                        <DropDown>
+                                            <span onClick={handleAuth}>Sing Out</span>
+                                        </DropDown>
+
+                                    </SignOut>
+
+
+
+
 
                     </>
-
             )}
-
-
         </Nav>
     );
 };
@@ -180,7 +207,7 @@ const NavigationMenu=styled.div`
 
     letter-spacing: 1.4px;
     line-height: 1px;
-    padding: 2px 0px;
+    padding: 2px 0;
     position: relative;
     white-space: nowrap;
 
@@ -191,17 +218,17 @@ const NavigationMenu=styled.div`
   &:before{
 
 background-color: rgb(249, 249, 249);
-border-radius: 0px 0px 4px 4px;
+border-radius: 0 0 4px 4px;
 bottom: -6px;
 content: "";
 height: 2px;
-left: 0px;
+left: 0;
 opacity: 0;
 position: absolute;
-right: 0px;
+right: 0;
 transform-origin: left center;
 transform: scaleX(0);
-transition: all 250ms cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s;
+transition: all 550ms cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s;
 visibility: hidden;
 width: auto;
 
@@ -252,8 +279,67 @@ const LoginButton=styled.a`
 
 const UserImg=styled.img`
     height: 100%;
+  //  transition: all 250ms;
+  //  
+  // 
+  //  border-radius: 50%;
+  //  //transition: all 250ms;
+  // 
+  //
+  //&:hover{
+  //    
+  //    height: 85%;
+  //    transition: all 250ms;
+  //  
+  //  }
+`;
+
+const DropDown=styled.div`
+  position: absolute;
+  top:48px;
+  right: 0;
+  align-items: center;
+  letter-spacing: 1px;
+  font-size: 12px;
+  width: 70px;
+  opacity: 0;
+  cursor: pointer; 
+  text-align: center;
+  border-radius: 4px;
+  border: 1px solid rgba(151, 151, 151, 0.34);
+  box-shadow: rgb(0 0 0 / 50%) 0 0 18px 0;
 
 `;
+
+const SignOut=styled.div`
+  position: relative;
+  height: 48px;
+  width: 48px;
+  align-items: center;
+  justify-content: center;
+  ${UserImg}{
+    border-radius: 50%;
+    transition: all 330ms;
+    
+    &:hover{
+      opacity: 0.75;
+      transition: all 250ms;
+    }
+  }
+  
+  &:hover{
+    ${DropDown}{
+      
+      opacity: 1;
+      transition-duration: 1s;
+    }
+  }
+    
+   
+
+
+`;
+
 
 
 
