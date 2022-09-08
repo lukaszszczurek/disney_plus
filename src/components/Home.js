@@ -1,6 +1,11 @@
 import React from 'react';
 import styled from "styled-components";
 import ImageSlider from "./ImageSlider";
+import Viewers from "./Viewers";
+import Recommends from "./Recommends";
+import Newdisney from "./Newdisney";
+import Originals from "./Originals";
+import Trending from "./Trending";
 
 console.log("Home Opened")
 
@@ -8,6 +13,11 @@ function Home(props) {
     return (
         <Container>
           <ImageSlider/>
+            <Viewers/>
+            <Recommends/>
+            <Newdisney/>
+            <Originals/>
+            <Trending/>
 
 
         </Container>
