@@ -1,40 +1,64 @@
 import React from 'react';
 import styled from "styled-components";
 import {Link} from "react-router-dom";
+import MovieSlice, {selectRecommend} from "./moviestowatch/movieSlice";
+import {useSelector} from "react-redux";
 
 function Recommends(props) {
+
+    const movieRecommends=useSelector(selectRecommend)
     return (
        <Container>
            <h4>Recommended for you</h4>
 
            <Content>
-              <Wrap>
-                  <Link to="/">
-                      <img src="/images/viewers-disney.png" alt=""/>
 
-                  </Link>
-              </Wrap>
 
-               <Wrap>
-                   <Link to="/">
-                       <img src="/images/viewers-disney.png" alt=""/>
+               { movieRecommends &&
+                   movieRecommends.map((movie,key)=>(
+
+                   <Wrap key={key}>
+                   <Link to={"details"+movie.id}>
+                   <img src={movie.cardImg} alt={movie.title}/>
 
                    </Link>
-               </Wrap>
 
-               <Wrap>
-                   <Link to="/">
-                       <img src="/images/viewers-disney.png" alt=""/>
+                   </Wrap>
 
-                   </Link>
-               </Wrap>
 
-               <Wrap>
-                   <Link to="/">
-                       <img src="/images/viewers-disney.png" alt=""/>
+                   ))}
 
-                   </Link>
-               </Wrap>
+
+
+
+
+              {/*<Wrap>*/}
+              {/*    <Link to="/">*/}
+              {/*        <img src="/images/viewers-disney.png" alt=""/>*/}
+
+              {/*    </Link>*/}
+              {/*</Wrap>*/}
+
+       {/*        <Wrap>*/}
+       {/*            <Link to="/">*/}
+       {/*                <img src="/images/viewers-disney.png" alt=""/>*/}
+
+       {/*            </Link>*/}
+       {/*        </Wrap>*/}
+
+       {/*        <Wrap>*/}
+       {/*            <Link to="/">*/}
+       {/*                <img src="/images/viewers-disney.png" alt=""/>*/}
+
+       {/*            </Link>*/}
+       {/*        </Wrap>*/}
+
+       {/*        <Wrap>*/}
+       {/*            <Link to="/">*/}
+       {/*                <img src="/images/viewers-disney.png" alt=""/>*/}
+
+       {/*            </Link>*/}
+       {/*        </Wrap>*/}
            </Content>
 
 
