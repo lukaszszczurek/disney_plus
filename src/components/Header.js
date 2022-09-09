@@ -56,7 +56,7 @@ import {selectUsername, selectUserEmail, selectUserPhoto, setUserLoginDetails, s
 
     const handleAuth=()=>{
 
-        if(UserPhoto){
+        if(!UserPhoto){
             signInWithPopup(auth,provider).then((result)=>{
                 console.log(result);
                 setUser(result.user);
@@ -68,7 +68,7 @@ import {selectUsername, selectUserEmail, selectUserPhoto, setUserLoginDetails, s
             })
 
         }
-        else if(!UserPhoto) {
+        else if(UserPhoto) {
 
             auth.signOut().then(()=>{
                 dispatch(setSignOutState());

@@ -1,12 +1,18 @@
 import React from 'react';
 import styled from "styled-components";
 import {Link} from "react-router-dom";
-import MovieSlice, {selectRecommend} from "./moviestowatch/movieSlice";
+import  {selectRecommend} from "./moviestowatch/movieSlice";
 import {useSelector} from "react-redux";
+import {selectUserPhoto} from "./user/userSlice";
+import db from "../firebase"
+import {collection, onSnapshot} from "firebase/firestore";
+
 
 function Recommends(props) {
+   const movies=useSelector(selectRecommend);
+    console.log(movies, ":🛢️");
 
-    const movieRecommends=useSelector(selectRecommend)
+
     return (
        <Container>
            <h4>Recommended for you</h4>
@@ -14,19 +20,38 @@ function Recommends(props) {
            <Content>
 
 
-               { movieRecommends &&
-                   movieRecommends.map((movie,key)=>(
 
-                   <Wrap key={key}>
-                   <Link to={"details"+movie.id}>
-                   <img src={movie.cardImg} alt={movie.title}/>
+               {/*{ movieRecommends &&*/}
+               {/*    movieRecommends.map((movie,key)=>(*/}
 
-                   </Link>
+               {/*    <Wrap key={key}>*/}
 
-                   </Wrap>
+               {/*        /!*hey*!/*/}
+               {/*        /!*{movie.id}*!/*/}
+               {/*        /!*<Link to={`/details/`+movie.id}>*!/*/}
+               {/*        /!*  //<img src="/images/logo.svg" alt={movie.title}/>*!/*/}
+               {/*        /!*</Link>*!/*/}
+               {/*    </Wrap>*/}
 
 
-                   ))}
+               {/*    ))*/}
+               {/*}*/}
+
+               { movies &&
+
+                   movies.map((movie, key) => (
+
+                       <Wrap key={key}>
+                           {movie.id}
+                           <Link to={`/detail/` + movie.id}>
+                               <img src={movie.cardImg} alt={movie.title} />
+                           </Link>
+                       </Wrap>
+                   ))
+               }
+
+
+               {console.log("mapping")}
 
 
 

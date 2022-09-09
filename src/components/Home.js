@@ -16,7 +16,6 @@ import {useDispatch, useSelector} from "react-redux";
 import { doc, setDoc } from "firebase/firestore";
 import { onSnapshot, collection } from 'firebase/firestore';
 
-
 function Home(props) {
 
     const dispatch=useDispatch();
@@ -29,13 +28,10 @@ function Home(props) {
 
     useEffect(()=>{
 
-        //test code
-
-
                onSnapshot(collection(db,'movies'),(snapshot)=>{
                        snapshot.docs.forEach((doc) => {
 
-
+                            console.log(recommends);
 
                            switch(doc.data().type){
 
@@ -52,49 +48,23 @@ function Home(props) {
                                    trending=[...trending,{id:doc.id,...doc.data()}];
 
 
-
-
                            }
+                           dispatch(setMovies({
+                                   recommend:recommends,
+                                   newDisney:newdisneys,
+                                   original:originals,
+                                   trending:trending,
+
+                               })
+                           );
+
                        });
 
-               })
+
+               });
 
 
-
-        //test code
-
-        // db.collection("movies").onSnapshot((snapshot)=>{
-        //     snapshot.docs.map((doc) => {
-        //         console.log(recommends);
-        //         switch(doc.data().type){
-        //             case 'recommend':
-        //                 recommends.push({id: doc.id,...doc.data()})
-        //                 break;
-        //             case 'new':
-        //                 newdisneys.push({id:doc.id,...doc.data()})
-        //                 break;
-        //             case 'original':
-        //                 originals.push({id:doc,...doc.data()})
-        //                 break;
-        //             case 'trending':
-        //                 trending.push({id:doc,...doc.data()})
-        //
-        //
-        //
-        //
-        //         }
-        //     });
-        // });
-
-
-        dispatch(setMovies({
-           recommend:recommends,
-           newDisney:newdisneys,
-           original:originals,
-           trending:trending,
-
-        }))
-    },[userPhoto])
+    },[userPhoto]);
 
 
 
@@ -132,8 +102,7 @@ const Container=styled.main`
     opacity: 1;
     z-index: -1;
   }
-  
-    color: white;
+    
 
 
 `;
