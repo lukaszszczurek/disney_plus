@@ -10,7 +10,9 @@ import {collection, onSnapshot} from "firebase/firestore";
 
 function Recommends(props) {
    const movies=useSelector(selectRecommend);
+
     console.log(movies, ":🛢️");
+
 
 
     return (
@@ -37,18 +39,21 @@ function Recommends(props) {
                {/*    ))*/}
                {/*}*/}
 
-               { movies &&
+               {
+                 movies &&
 
                    movies.map((movie, key) => (
 
-                       <Wrap key={key}>
-                           {movie.id}
-                           <Link to={`/detail/` + movie.id}>
-                               <img src={movie.cardImg} alt={movie.title} />
-                           </Link>
-                       </Wrap>
-                   ))
-               }
+
+                   <Wrap key={key}>
+               {movie.id}
+                   <Link to={`/detail/` + movie.id}>
+                   <img src={movie.cardImg} alt={movie.title} />
+                   </Link>
+                   </Wrap>
+                   ))}
+
+
 
 
                {console.log("mapping")}

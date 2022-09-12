@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import styled from "styled-components";
 import ImageSlider from "./ImageSlider";
 import Viewers from "./Viewers";
@@ -14,9 +14,18 @@ import { selectUserPhoto} from "./user/userSlice";
 import {useDispatch, useSelector} from "react-redux";
 
 import { doc, setDoc } from "firebase/firestore";
+
 import { onSnapshot, collection } from 'firebase/firestore';
 
+
 function Home(props) {
+
+    window.onload = function() {
+        if(!window.location.hash) {
+            window.location = window.location + '#loaded';
+            window.location.reload();
+        }
+    }
 
     const dispatch=useDispatch();
     const userPhoto=useSelector(selectUserPhoto);
@@ -28,8 +37,16 @@ function Home(props) {
 
     useEffect(()=>{
 
+
+
+
+
+
+
+
                onSnapshot(collection(db,'movies'),(snapshot)=>{
                        snapshot.docs.forEach((doc) => {
+
 
                             console.log(recommends);
 
@@ -64,13 +81,20 @@ function Home(props) {
                });
 
 
+
+
     },[userPhoto]);
+    // window.location.reload(true);
+
 
 
 
 
 
     return (
+
+
+
         <Container>
           <ImageSlider/>
             <Viewers/>
@@ -83,6 +107,8 @@ function Home(props) {
         </Container>
     );
 }
+
+
 
 const Container=styled.main`
   position: relative;

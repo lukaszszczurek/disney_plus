@@ -1,40 +1,29 @@
 import React from 'react';
 import styled from "styled-components";
 import {Link} from "react-router-dom";
+import {selectOriginals} from "./moviestowatch/movieSlice";
+import {useSelector} from "react-redux";
+
 
 function Originals(props) {
+    const movies=useSelector(selectOriginals);
     return (
         <Container>
             <h4>Originals</h4>
 
             <Content>
-                <Wrap>
-                    <Link to="/">
-                        <img src="/images/viewers-disney.png" alt=""/>
+                {
+                    movies &&
 
-                    </Link>
-                </Wrap>
+                    movies.map((movie, key) => (
 
-                <Wrap>
-                    <Link to="/">
-                        <img src="/images/viewers-disney.png" alt=""/>
-
-                    </Link>
-                </Wrap>
-
-                <Wrap>
-                    <Link to="/">
-                        <img src="/images/viewers-disney.png" alt=""/>
-
-                    </Link>
-                </Wrap>
-
-                <Wrap>
-                    <Link to="/">
-                        <img src="/images/viewers-disney.png" alt=""/>
-
-                    </Link>
-                </Wrap>
+                        <Wrap key={key}>
+                            {movie.id}
+                            <Link to={`/detail/` + movie.id}>
+                                <img src={movie.cardImg} alt={movie.title} />
+                            </Link>
+                        </Wrap>
+                    ))}
             </Content>
 
 
