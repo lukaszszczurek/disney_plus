@@ -1,20 +1,50 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import styled from "styled-components";
+import {useParams} from "react-router-dom";
+import {collection, getDocs, setDoc, doc, onSnapshot,} from 'firebase/firestore'
+import db from "../firebase";
+
+
+
+import 'firebase/firestore';
+import 'firebase/auth';
+
+
 
 function Detail(props) {
+    const {id}=useParams();
+    const [DataDetail,SetDataDetail]=useState({});
+
+    useEffect(()=>{
+        onSnapshot(collection(db,'movies'),(snapshot)=>{
+            snapshot.docs.forEach((doc) => {
+                console.log("hi")
+                if (doc.id===id){
+                    SetDataDetail(doc.data());
+
+                }
+
+            })
+        })
+
+
+    },[id])
+
     return (
+
         <Container>
             <Background>
                 <img
-                src="https://prod-ripcut-delivery.disney-plus.net/v1/variant/disney/FA1548A6B82C9991B1D38DF251A388FEA2483904510FBC73E150F67F7BDE38C0/scale?width=1440&aspectRatio=1.78&format=jpeg"
-                alt={"Tangled"}
+                src={DataDetail.backgroundImg}
+                alt={DataDetail.title}
                 />
 
             </Background>
 
             <ImageTitle>
                 <img
-                src="https://prod-ripcut-delivery.disney-plus.net/v1/variant/disney/F70235E3463A6F246EB462ED5379F9D41D6318E80098BD40900E7AFC1C7D932D/scale?width=1440&aspectRatio=1.78"
+                    src={DataDetail.titleImg}
+                    alt={DataDetail.title}
                 />
 
 
@@ -27,11 +57,27 @@ function Detail(props) {
                     </Player>
 
                     <Trailer>
-                        <img src="/images/play-icon-black.png"/>
+                        <img src="/images/play-icon-white.png"/>
                         <span>Trailer</span>
 
                     </Trailer>
+
+                    <AddList>+</AddList>
+                    <GroupWatch>
+                        <img src="/images/group-icon.png"/>
+                    </GroupWatch>
+
+
+
+
                 </Controls>
+                <Subtitle>
+                    {DataDetail.subTitle}
+                </Subtitle>
+
+                <Description>
+                    {DataDetail.description}
+                </Description>
             </ContentMeta>
 
         </Container>
@@ -119,7 +165,7 @@ const Controls = styled.div`
 
 const Player = styled.button`
   font-size: 15px;
-  margin: 10px 22px 30px 30px;
+  margin: 10px 22px 0px 30px;
   padding: 5px 24px;
   height: 56px;
   border-radius: 4px;
@@ -153,6 +199,7 @@ const Trailer = styled(Player)`
   background: rgba(0, 0, 0, 0.3);
   border: 1px solid rgb(249, 249, 249);
   color: rgb(249, 249, 249);
+  margin-left: 0;
   &:hover {
     background: rgba(0, 0, 0,0.5);
   }
@@ -163,6 +210,8 @@ const Trailer = styled(Player)`
 
 
 const AddList = styled.div`
+  margin-top: 0;
+  font-size: 40px;
   margin-right: 16px;
   height: 44px;
   width: 44px;
@@ -176,17 +225,48 @@ const AddList = styled.div`
   span {
     background-color: rgb(249, 249, 249);
     display: inline-block;
-    &:first-child {
-      height: 2px;
-      transform: translate(1px, 0px) rotate(0deg);
-      width: 16px;
-    }
-    &:nth-child(2) {
-      height: 16px;
-      transform: translateX(-8px) rotate(0deg);
-      width: 2px;
-    }
+    //&:first-child {
+    //  height: 2px;
+    //  transform: translate(1px, 0px) rotate(0deg);
+    //  width: 16px;
+    // 
+    //  
+    //}
+    //&:nth-child(2) {
+    //  height: 16px;
+    //  transform: translateX(-8px) rotate(0deg);
+    //  width: 2px;
+    //  
+    //}
   }
+`;
+const GroupWatch=styled(AddList)`
+
+
+
+`;
+
+const Subtitle=styled.div`
+  color: rgb(249, 249, 249);
+  font-size: 15px;
+  min-height: 20px;
+  margin-left: 1.8vw;
+  @media (max-width: 768px) {
+    font-size: 12px;
+  }
+
+`;
+
+const Description=styled.div`
+  line-height: 1.4;
+  font-size: 20px;
+  padding: 16px 0px;
+  color: rgb(249, 249, 249);
+  margin-left: 2vw;
+  @media (max-width: 768px) {
+    font-size: 14px;
+  }
+
 `;
 
 export default Detail;
