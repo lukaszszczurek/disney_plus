@@ -35,6 +35,12 @@ import {selectUsername, selectUserEmail, selectUserPhoto, setUserLoginDetails, s
             if(user){
                 setUser(user);
                 history("/home");
+
+
+
+
+
+
             }
         })
 
@@ -42,6 +48,7 @@ import {selectUsername, selectUserEmail, selectUserPhoto, setUserLoginDetails, s
 
 
     const setUser=(user) => {
+
         dispatch(
         setUserLoginDetails({
 
@@ -60,6 +67,14 @@ import {selectUsername, selectUserEmail, selectUserPhoto, setUserLoginDetails, s
             signInWithPopup(auth,provider).then((result)=>{
                 console.log(result);
                 setUser(result.user);
+                window.onload = function() {
+                    if(!window.location.hash) {
+                        window.location = window.location + '#loaded';
+                        window.location.reload();
+                    }
+                }
+
+
 
 
             }).catch((error)=>{
@@ -73,6 +88,7 @@ import {selectUsername, selectUserEmail, selectUserPhoto, setUserLoginDetails, s
             auth.signOut().then(()=>{
                 dispatch(setSignOutState());
                 history("/");
+
 
             }).catch((err)=>alert(err.message));
         }

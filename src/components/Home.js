@@ -10,30 +10,33 @@ import Trending from "./Trending";
 
 import db from "../firebase";
 import {setMovies} from "./moviestowatch/movieSlice";
-import { selectUserPhoto} from "./user/userSlice";
+import {selectUsername, selectUserPhoto} from "./user/userSlice";
 import {useDispatch, useSelector} from "react-redux";
 
-import { doc, setDoc } from "firebase/firestore";
+import {doc, getDocs, setDoc} from "firebase/firestore";
 
 import { onSnapshot, collection } from 'firebase/firestore';
 
 
 function Home(props) {
 
-    window.onload = function() {
-        if(!window.location.hash) {
-            window.location = window.location + '#loaded';
-            window.location.reload();
-        }
-    }
+
+
+
+
+
 
     const dispatch=useDispatch();
     const userPhoto=useSelector(selectUserPhoto);
+    const UserName=useSelector(selectUsername);
     let recommends=[];
+
     let newdisneys=[];
     let originals=[];
     let trending=[];
     console.log(db);
+    let array=[];
+
 
     useEffect(()=>{
 
@@ -44,38 +47,71 @@ function Home(props) {
 
 
 
+
+
                onSnapshot(collection(db,'movies'),(snapshot)=>{
                        snapshot.docs.forEach((doc) => {
+                           let a=false;
+                           if(array.includes(doc.id)){
+                               a=true;
+                           }
+                           else if(!array.includes(doc.id)){
+                               a=false;
+                           }
+
+
+                           console.log(a+'😀')
+
+
+
+                           if(!a){
+                               array.push(doc.id);
+                               console.log(a+'😀')
+                               console.log(array+'🙃');
+
+
+                               switch(doc.data().type){
+
+
+                                   case 'recommend':
+
+                                       console.log(doc.name);
+
+                                       recommends=[...recommends,{id:doc.id,...doc.data()}];
+
+
+                                       break;
+                                   case 'new':
+                                       newdisneys=[...newdisneys,{id:doc.id,...doc.data()}];
+                                       break;
+                                   case 'original':
+                                       originals=[...originals,{id:doc.id,...doc.data()}];
+                                       break;
+                                   case 'trending':
+                                       trending=[...trending,{id:doc.id,...doc.data()}];
+
+
+                               }
+
+                           }
+
+
 
 
                             console.log(recommends);
 
-                           switch(doc.data().type){
-
-                               case 'recommend':
-                                   recommends=[...recommends,{id:doc.id,...doc.data()}];
-                                   break;
-                               case 'new':
-                                   newdisneys=[...newdisneys,{id:doc.id,...doc.data()}];
-                                   break;
-                               case 'original':
-                                   originals=[...originals,{id:doc.id,...doc.data()}];
-                                   break;
-                               case 'trending':
-                                   trending=[...trending,{id:doc.id,...doc.data()}];
 
 
-                           }
-                           dispatch(setMovies({
-                                   recommend:recommends,
-                                   newDisney:newdisneys,
-                                   original:originals,
-                                   trending:trending,
-
-                               })
-                           );
 
                        });
+                   dispatch(setMovies({
+                           recommend:recommends,
+                           newDisney:newdisneys,
+                           original:originals,
+                           trending:trending,
+
+                       })
+                   );
 
 
                });
@@ -84,6 +120,9 @@ function Home(props) {
 
 
     },[userPhoto]);
+
+
+
     // window.location.reload(true);
 
 
@@ -92,6 +131,7 @@ function Home(props) {
 
 
     return (
+
 
 
 

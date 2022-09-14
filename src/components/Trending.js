@@ -13,7 +13,7 @@ function Trending(props) {
             <Content>
                 {
                     movies && movies.map((movie,key)=>(
-                        <Wrap>
+                        <Wrap key={key}>
                             {movie.id}
                             <Link to={`/detail/`+movie.id}>
                                 <img src={movie.cardImg} alt={movie.title}/>
@@ -21,6 +21,10 @@ function Trending(props) {
                         </Wrap>
                     ))
                 }
+                {
+
+                }
+
 
             </Content>
 

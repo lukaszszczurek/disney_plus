@@ -22,36 +22,24 @@ function Recommends(props) {
            <Content>
 
 
+                   {
+                       movies &&
 
-               {/*{ movieRecommends &&*/}
-               {/*    movieRecommends.map((movie,key)=>(*/}
-
-               {/*    <Wrap key={key}>*/}
-
-               {/*        /!*hey*!/*/}
-               {/*        /!*{movie.id}*!/*/}
-               {/*        /!*<Link to={`/details/`+movie.id}>*!/*/}
-               {/*        /!*  //<img src="/images/logo.svg" alt={movie.title}/>*!/*/}
-               {/*        /!*</Link>*!/*/}
-               {/*    </Wrap>*/}
-
-
-               {/*    ))*/}
-               {/*}*/}
-
-               {
-                 movies &&
 
                    movies.map((movie, key) => (
 
 
+
+
+                     // movies.include
                    <Wrap key={key}>
                {movie.id}
                    <Link to={`/detail/` + movie.id}>
-                   <img src={movie.cardImg} alt={movie.title} />
+                   <img key={movie.id} src={movie.cardImg} alt={movie.title} />
                    </Link>
                    </Wrap>
-                   ))}
+                   ))
+                   }
 
 
 
@@ -62,33 +50,7 @@ function Recommends(props) {
 
 
 
-              {/*<Wrap>*/}
-              {/*    <Link to="/">*/}
-              {/*        <img src="/images/viewers-disney.png" alt=""/>*/}
 
-              {/*    </Link>*/}
-              {/*</Wrap>*/}
-
-       {/*        <Wrap>*/}
-       {/*            <Link to="/">*/}
-       {/*                <img src="/images/viewers-disney.png" alt=""/>*/}
-
-       {/*            </Link>*/}
-       {/*        </Wrap>*/}
-
-       {/*        <Wrap>*/}
-       {/*            <Link to="/">*/}
-       {/*                <img src="/images/viewers-disney.png" alt=""/>*/}
-
-       {/*            </Link>*/}
-       {/*        </Wrap>*/}
-
-       {/*        <Wrap>*/}
-       {/*            <Link to="/">*/}
-       {/*                <img src="/images/viewers-disney.png" alt=""/>*/}
-
-       {/*            </Link>*/}
-       {/*        </Wrap>*/}
            </Content>
 
 
