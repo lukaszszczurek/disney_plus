@@ -7,11 +7,12 @@ import {signInWithPopup} from "firebase/auth"
 
 //redux
 import {useDispatch,useSelector} from "react-redux";
-import {useNavigate} from "react-router-dom";
+import { useNavigate} from "react-router-dom";
 
 
 //console.log(unstable_HistoryRouter);
 import {selectUsername, selectUserEmail, selectUserPhoto, setUserLoginDetails, setSignOutState} from "./user/userSlice";
+
 
 
 // require('firebase/auth')
@@ -20,7 +21,7 @@ import {selectUsername, selectUserEmail, selectUserPhoto, setUserLoginDetails, s
 
 
 
-
+    let [isActuallyNotLogged,setActuallyNotLogged]=useState(true)
     const dispatch=useDispatch();
     const history=useNavigate();
     const UserName=useSelector(selectUsername);
@@ -34,7 +35,15 @@ import {selectUsername, selectUserEmail, selectUserPhoto, setUserLoginDetails, s
 
             if(user){
                 setUser(user);
-                history("/home");
+
+                console.log(isActuallyNotLogged + " sss ");
+
+
+
+
+
+
+
 
 
 
@@ -50,6 +59,7 @@ import {selectUsername, selectUserEmail, selectUserPhoto, setUserLoginDetails, s
     const setUser=(user) => {
 
         dispatch(
+
         setUserLoginDetails({
 
             name:user.displayName,
@@ -59,6 +69,9 @@ import {selectUsername, selectUserEmail, selectUserPhoto, setUserLoginDetails, s
         })
         );
 
+
+
+
     };
 
     const handleAuth=()=>{
@@ -67,12 +80,9 @@ import {selectUsername, selectUserEmail, selectUserPhoto, setUserLoginDetails, s
             signInWithPopup(auth,provider).then((result)=>{
                 console.log(result);
                 setUser(result.user);
-                window.onload = function() {
-                    if(!window.location.hash) {
-                        window.location = window.location + '#loaded';
-                        window.location.reload();
-                    }
-                }
+                setActuallyNotLogged = false;
+                history("/home");
+
 
 
 
@@ -98,6 +108,7 @@ import {selectUsername, selectUserEmail, selectUserPhoto, setUserLoginDetails, s
     return (
         <Nav>
             <Logo >
+
                 <img src="/images/logo.svg" alt="Disney+"/>
 
             </Logo>
@@ -107,33 +118,36 @@ import {selectUsername, selectUserEmail, selectUserPhoto, setUserLoginDetails, s
                 ):(
 
 
+
+
                     <>
                             <NavigationMenu>
                             <a href="/home">
+
 
                                 <img src={"/images/home-icon.svg"} alt="Home"/>
 
                                 <span>HOME</span>
                             </a>
 
-                            <a href={"/search"}>
+                            <a href="/search">
                                 <img src="/images/search-icon.svg" alt="Search" />
                                 <span>SEARCH</span>
                             </a>
 
-                            <a href={"watchlist"}>
+                            <a href={"/watchlist"}>
                                 <img src="/images/watchlist-icon.svg" alt="WATCHLIST" />
                                 <span>WATCHLIST</span>
                             </a>
-                            <a href={"originals"}>
+                            <a href={"/originals"}>
                                 <img src="/images/original-icon.svg" alt="ORIGINALS" />
                                 <span>ORIGINALS</span>
                             </a>
-                            <a href={"movies"}>
+                            <a href={"/movies"}>
                                 <img src="/images/movie-icon.svg" alt="MOVIES" />
                                 <span>MOVIES</span>
                             </a>
-                            <a href={"series"}>
+                            <a href={"/series"}>
                                 <img src="/images/series-icon.svg" alt="SERIES" />
                                 <span>SERIES</span>
                             </a>

@@ -20,6 +20,8 @@ import { onSnapshot, collection } from 'firebase/firestore';
 
 function Home(props) {
 
+    console.log(process.env.REACT_APP_API+"@@@@@");
+
 
 
 
@@ -120,13 +122,6 @@ function Home(props) {
 
 
     },[userPhoto]);
-
-
-
-    // window.location.reload(true);
-
-
-
 
 
 
