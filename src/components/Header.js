@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import styled from "styled-components";
 import {auth, provider} from "../firebase.js";
-import {signInWithPopup} from "firebase/auth"
+import {signInWithPopup} from "firebase/auth";
 
 
 
@@ -12,6 +12,7 @@ import { useNavigate} from "react-router-dom";
 
 //console.log(unstable_HistoryRouter);
 import {selectUsername, selectUserEmail, selectUserPhoto, setUserLoginDetails, setSignOutState} from "./user/userSlice";
+
 
 
 
@@ -81,7 +82,11 @@ import {selectUsername, selectUserEmail, selectUserPhoto, setUserLoginDetails, s
                 console.log(result);
                 setUser(result.user);
                 setActuallyNotLogged = false;
+
                 history("/home");
+                //setUSER_ACCESS("isLogged",false);
+
+
 
 
 
@@ -98,12 +103,18 @@ import {selectUsername, selectUserEmail, selectUserPhoto, setUserLoginDetails, s
             auth.signOut().then(()=>{
                 dispatch(setSignOutState());
                 history("/");
+              //  setUSER_ACCESS("isLogged",false);
+
+
 
 
             }).catch((err)=>alert(err.message));
         }
 
     }
+
+
+     console.log(UserPhoto) ;
 
     return (
         <Nav>
