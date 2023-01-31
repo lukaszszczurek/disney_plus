@@ -14,7 +14,6 @@ function Originals(props) {
             <Content>
                 {
                     movies &&
-
                     movies.map((movie, key) => (
 
                         <Wrap key={key}>

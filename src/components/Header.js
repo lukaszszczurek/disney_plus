@@ -7,7 +7,7 @@ import {signInWithPopup} from "firebase/auth"
 
 //redux
 import {useDispatch,useSelector} from "react-redux";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 
 //console.log(unstable_HistoryRouter);
@@ -20,24 +20,27 @@ import {selectUsername, selectUserEmail, selectUserPhoto, setUserLoginDetails, s
 
 
 
-
+    const [LoginBool,setLoginBool]=useState(false);  //bool value before logged is true and by default after close and open page. Bool makes user first page after logging is /home page
     const dispatch=useDispatch();
     const history=useNavigate();
     const UserName=useSelector(selectUsername);
     const UserPhoto=useSelector(selectUserPhoto);
 
 
-
     useEffect(()=>{
+        console.log(LoginBool);
 
         auth.onAuthStateChanged(async (user)=>{
 
             if(user){
                 setUser(user);
-                history("/home");
 
 
-
+                if(LoginBool===true)
+                {
+                    history("/home");
+                     setLoginBool(false);
+                }
 
 
 
@@ -45,6 +48,8 @@ import {selectUsername, selectUserEmail, selectUserPhoto, setUserLoginDetails, s
         })
 
     },[UserPhoto]);
+
+
 
 
     const setUser=(user) => {
@@ -64,22 +69,24 @@ import {selectUsername, selectUserEmail, selectUserPhoto, setUserLoginDetails, s
     const handleAuth=()=>{
 
         if(!UserPhoto){
+
             signInWithPopup(auth,provider).then((result)=>{
                 console.log(result);
                 setUser(result.user);
-                window.onload = function() {
-                    if(!window.location.hash) {
-                        window.location = window.location + '#loaded';
-                        window.location.reload();
-                    }
-                }
+                setLoginBool(true);
+                // window.onload = function() {
+                //     if(!window.location.hash) {
+                //         window.location = window.location + '#loaded';
+                //         window.location.reload();
+                //     }
+                // }
 
 
 
 
             }).catch((error)=>{
 
-                alert(error.message)
+                alert("Logging failed");
             })
 
         }
@@ -88,6 +95,8 @@ import {selectUsername, selectUserEmail, selectUserPhoto, setUserLoginDetails, s
             auth.signOut().then(()=>{
                 dispatch(setSignOutState());
                 history("/");
+               // setLoginBool(true);
+                console.log(LoginBool);
 
 
             }).catch((err)=>alert(err.message));
@@ -109,14 +118,18 @@ import {selectUsername, selectUserEmail, selectUserPhoto, setUserLoginDetails, s
 
                     <>
                             <NavigationMenu>
-                            <a href="/home">
+                            <a href="/home" >
 
-                                <img src={"/images/home-icon.svg"} alt="Home"/>
+
+                                <img src={"/images/home-icon.svg"}  alt="Home" />
 
                                 <span>HOME</span>
                             </a>
 
-                            <a href={"/search"}>
+                            <a href="/search" >
+                                <Link to={"/search"}/>
+
+
                                 <img src="/images/search-icon.svg" alt="Search" />
                                 <span>SEARCH</span>
                             </a>
@@ -129,7 +142,7 @@ import {selectUsername, selectUserEmail, selectUserPhoto, setUserLoginDetails, s
                                 <img src="/images/original-icon.svg" alt="ORIGINALS" />
                                 <span>ORIGINALS</span>
                             </a>
-                            <a href={"movies"}>
+                            <a href="/movies">
                                 <img src="/images/movie-icon.svg" alt="MOVIES" />
                                 <span>MOVIES</span>
                             </a>

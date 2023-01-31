@@ -13,22 +13,22 @@ import 'firebase/auth';
 
 
 function Detail(props) {
-   function componentDidMount() {
-        window.history.pushState(null, document.title, window.location.href);
-        window.addEventListener('popstate', function (event){
-            window.history.pushState(null, document.title,  window.location.href);
-        });
-    }
+   // function componentDidMount() {
+   //      window.history.pushState(null, document.title, window.location.href);
+   //      window.addEventListener('popstate', function (event){
+   //          window.history.pushState(null, document.title,  window.location.href);
+   //      });
+   //  }
     const {id}=useParams();
 
     const [DataDetail,SetDataDetail]=useState({});
 
     useEffect(()=>{
-        componentDidMount();
+        // componentDidMount();
 
         onSnapshot(collection(db,'movies'),(snapshot)=>{
             snapshot.docs.forEach((doc) => {
-                console.log("hi")
+
                 if (doc.id===id){
                     SetDataDetail(doc.data());
 

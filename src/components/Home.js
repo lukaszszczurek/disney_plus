@@ -21,53 +21,40 @@ import { onSnapshot, collection } from 'firebase/firestore';
 function Home(props) {
 
 
-
-
-
-
-
     const dispatch=useDispatch();
     const userPhoto=useSelector(selectUserPhoto);
-    const UserName=useSelector(selectUsername);
+    //const UserName=useSelector(selectUsername);
     let recommends=[];
 
     let newdisneys=[];
     let originals=[];
     let trending=[];
-    console.log(db);
+    let allMovies=[]
+    //console.log(db);
     let array=[];
 
 
     useEffect(()=>{
 
 
-
-
-
-
-
-
-
-
                onSnapshot(collection(db,'movies'),(snapshot)=>{
                        snapshot.docs.forEach((doc) => {
-                           let a=false;
+                           let RepeatMovie=false;
                            if(array.includes(doc.id)){
-                               a=true;
+                               RepeatMovie=true;
                            }
                            else if(!array.includes(doc.id)){
-                               a=false;
+                               RepeatMovie=false;
                            }
 
-
-                           console.log(a+'😀')
-
+                          // console.log(a+'😀')
 
 
-                           if(!a){
+
+                           if(!RepeatMovie){
                                array.push(doc.id);
-                               console.log(a+'😀')
-                               console.log(array+'🙃');
+                              // console.log(a+'😀')
+                              // console.log(array+'🙃');
 
 
                                switch(doc.data().type){
@@ -75,20 +62,24 @@ function Home(props) {
 
                                    case 'recommend':
 
-                                       console.log(doc.name);
+                                      // console.log(doc.name);
 
                                        recommends=[...recommends,{id:doc.id,...doc.data()}];
+                                       allMovies=[...allMovies,{id:doc.id,...doc.data()}];
 
 
                                        break;
                                    case 'new':
                                        newdisneys=[...newdisneys,{id:doc.id,...doc.data()}];
+                                       allMovies=[...allMovies,{id:doc.id,...doc.data()}];
                                        break;
                                    case 'original':
                                        originals=[...originals,{id:doc.id,...doc.data()}];
+                                       allMovies=[...allMovies,{id:doc.id,...doc.data()}];
                                        break;
                                    case 'trending':
                                        trending=[...trending,{id:doc.id,...doc.data()}];
+                                       allMovies=[...allMovies,{id:doc.id,...doc.data()}];
 
 
                                }
@@ -98,10 +89,7 @@ function Home(props) {
 
 
 
-                            console.log(recommends);
-
-
-
+                           // console.log(recommends);
 
                        });
                    dispatch(setMovies({
@@ -113,27 +101,10 @@ function Home(props) {
                        })
                    );
 
-
                });
-
-
-
-
     },[userPhoto]);
 
-
-
-    // window.location.reload(true);
-
-
-
-
-
-
     return (
-
-
-
 
         <Container>
           <ImageSlider/>
@@ -143,11 +114,9 @@ function Home(props) {
             <Originals/>
             <Trending/>
 
-
         </Container>
     );
 }
-
 
 
 const Container=styled.main`
@@ -174,3 +143,6 @@ const Container=styled.main`
 `;
 
 export default Home;
+export let allMovies;
+
+

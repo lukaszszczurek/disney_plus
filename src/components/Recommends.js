@@ -11,7 +11,7 @@ import {collection, onSnapshot} from "firebase/firestore";
 function Recommends(props) {
    const movies=useSelector(selectRecommend);
 
-    console.log(movies, ":🛢️");
+  //  console.log(movies, ":🛢️");
 
 
 
@@ -44,7 +44,7 @@ function Recommends(props) {
 
 
 
-               {console.log("mapping")}
+
 
 
 

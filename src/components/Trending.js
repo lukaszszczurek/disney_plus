@@ -21,9 +21,7 @@ function Trending(props) {
                         </Wrap>
                     ))
                 }
-                {
 
-                }
 
 
             </Content>
