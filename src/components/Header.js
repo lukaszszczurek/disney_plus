@@ -1,17 +1,19 @@
 import React, {useEffect, useState} from 'react';
 import styled from "styled-components";
 import {auth, provider} from "../firebase.js";
-import {signInWithPopup} from "firebase/auth"
+import {signInWithPopup} from "firebase/auth";
 
 
 
 //redux
 import {useDispatch,useSelector} from "react-redux";
-import {Link, useNavigate} from "react-router-dom";
+import { useNavigate} from "react-router-dom";
 
 
 //console.log(unstable_HistoryRouter);
 import {selectUsername, selectUserEmail, selectUserPhoto, setUserLoginDetails, setSignOutState} from "./user/userSlice";
+
+
 
 
 // require('firebase/auth')
@@ -20,27 +22,32 @@ import {selectUsername, selectUserEmail, selectUserPhoto, setUserLoginDetails, s
 
 
 
-    const [LoginBool,setLoginBool]=useState(false);  //bool value before logged is true and by default after close and open page. Bool makes user first page after logging is /home page
+    let [isActuallyNotLogged,setActuallyNotLogged]=useState(true)
     const dispatch=useDispatch();
     const history=useNavigate();
     const UserName=useSelector(selectUsername);
     const UserPhoto=useSelector(selectUserPhoto);
 
 
+
     useEffect(()=>{
-        console.log(LoginBool);
 
         auth.onAuthStateChanged(async (user)=>{
 
             if(user){
                 setUser(user);
 
+                console.log(isActuallyNotLogged + " sss ");
 
-                if(LoginBool===true)
-                {
-                    history("/home");
-                     setLoginBool(false);
-                }
+
+
+
+
+
+
+
+
+
 
 
 
@@ -50,11 +57,10 @@ import {selectUsername, selectUserEmail, selectUserPhoto, setUserLoginDetails, s
     },[UserPhoto]);
 
 
-
-
     const setUser=(user) => {
 
         dispatch(
+
         setUserLoginDetails({
 
             name:user.displayName,
@@ -64,29 +70,31 @@ import {selectUsername, selectUserEmail, selectUserPhoto, setUserLoginDetails, s
         })
         );
 
+
+
+
     };
 
     const handleAuth=()=>{
 
         if(!UserPhoto){
-
             signInWithPopup(auth,provider).then((result)=>{
                 console.log(result);
                 setUser(result.user);
-                setLoginBool(true);
-                // window.onload = function() {
-                //     if(!window.location.hash) {
-                //         window.location = window.location + '#loaded';
-                //         window.location.reload();
-                //     }
-                // }
+                setActuallyNotLogged = false;
+
+                history("/home");
+                //setUSER_ACCESS("isLogged",false);
+
+
+
 
 
 
 
             }).catch((error)=>{
 
-                alert("Logging failed");
+                alert(error.message)
             })
 
         }
@@ -95,8 +103,9 @@ import {selectUsername, selectUserEmail, selectUserPhoto, setUserLoginDetails, s
             auth.signOut().then(()=>{
                 dispatch(setSignOutState());
                 history("/");
-               // setLoginBool(true);
-                console.log(LoginBool);
+              //  setUSER_ACCESS("isLogged",false);
+
+
 
 
             }).catch((err)=>alert(err.message));
@@ -104,9 +113,13 @@ import {selectUsername, selectUserEmail, selectUserPhoto, setUserLoginDetails, s
 
     }
 
+
+     console.log(UserPhoto) ;
+
     return (
         <Nav>
             <Logo >
+
                 <img src="/images/logo.svg" alt="Disney+"/>
 
             </Logo>
@@ -116,37 +129,36 @@ import {selectUsername, selectUserEmail, selectUserPhoto, setUserLoginDetails, s
                 ):(
 
 
+
+
                     <>
                             <NavigationMenu>
-                            <a href="/home" >
+                            <a href="/home">
 
 
-                                <img src={"/images/home-icon.svg"}  alt="Home" />
+                                <img src={"/images/home-icon.svg"} alt="Home"/>
 
                                 <span>HOME</span>
                             </a>
 
-                            <a href="/search" >
-                                <Link to={"/search"}/>
-
-
+                            <a href="/search">
                                 <img src="/images/search-icon.svg" alt="Search" />
                                 <span>SEARCH</span>
                             </a>
 
-                            <a href={"watchlist"}>
+                            <a href={"/watchlist"}>
                                 <img src="/images/watchlist-icon.svg" alt="WATCHLIST" />
                                 <span>WATCHLIST</span>
                             </a>
-                            <a href={"originals"}>
+                            <a href={"/originals"}>
                                 <img src="/images/original-icon.svg" alt="ORIGINALS" />
                                 <span>ORIGINALS</span>
                             </a>
-                            <a href="/movies">
+                            <a href={"/movies"}>
                                 <img src="/images/movie-icon.svg" alt="MOVIES" />
                                 <span>MOVIES</span>
                             </a>
-                            <a href={"series"}>
+                            <a href={"/series"}>
                                 <img src="/images/series-icon.svg" alt="SERIES" />
                                 <span>SERIES</span>
                             </a>
