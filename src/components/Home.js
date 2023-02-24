@@ -85,10 +85,6 @@ function Home(props) {
                                }
 
                            }
-
-
-
-
                            // console.log(recommends);
 
                        });

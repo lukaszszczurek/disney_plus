@@ -1,26 +1,39 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {useSelector} from "react-redux";
-
 import {Input} from "@mui/material";
+import {TextField} from "@mui/material";
 import {selectRecommend,selectAllMovies} from "./moviestowatch/movieSlice";
 import styled from "styled-components";
 import {Link} from "react-router-dom";
 
+
+
 function SearchInput(props) {
+    const [titleInput,setTitleInput] = useState("");
     const movies = useSelector(selectAllMovies);
     const getmovie= useSelector(selectRecommend);
-    console.log(movies)
+
     return (
         <Container>
         {/*<Input id="outlined-basic" />*/}
-            <InputTitle/>
+        {/*    <InputStyled onChange={(e)=>setTitleInput(e.target.value)} />*/}
+
+            {/*<input/>*/}
+            <TextField id="outlined-basic" label="Outlined" onChange={(e)=>setTitleInput(e.target.value)} variant="outlined" sx={
+                {
+                    color:'white',
+                    bgcolor:'white',
+
+                }} />
             <Content>
+
             {
-                movies && movies.map((movie,key)=>(
+                movies && movies.filter(titles=>titles.title.toLowerCase().includes(titleInput)).map((movie,key)=>(
                     <Wrap key={key}>
                         {movie.id}
-                        <Link to={'/detail' + movie.id}/>
+                        <Link to={`/detail/` + movie.id}>
                         <img src={movie.cardImg}/>
+                            </Link>
                     </Wrap>
 
                     ))}
@@ -32,8 +45,24 @@ function SearchInput(props) {
 
 export default SearchInput;
 
+const InputStyled=styled.input`
+  font-family: Lato,sans-serif;
+  color: #242424;
+  padding-right: 3.75rem;
+  caret-color: #ffc200;
+  padding-top: 150px;
+  height: 5vh;
+  outline: none;
+  font-size: 8vh;
+  align-content: center;
+  margin-left: 15vw;
+  
+  
+  
+`;
 
 const Wrap = styled.div`
+  
   padding-top: 56.25%;
   border-radius: 10px;
   box-shadow: rgb(0 0 0 / 69%) 0px 26px 30px -10px,
@@ -65,7 +94,8 @@ const Wrap = styled.div`
 `;
 
 const Container=styled.div`
-    padding: 0 0 26px;
+    
+    padding: 100px 50px 26px;
 
 
 

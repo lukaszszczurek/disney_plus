@@ -37,20 +37,6 @@ import {selectUsername, selectUserEmail, selectUserPhoto, setUserLoginDetails, s
             if(user){
                 setUser(user);
 
-                console.log(isActuallyNotLogged + " sss ");
-
-
-
-
-
-
-
-
-
-
-
-
-
             }
         })
 
@@ -71,8 +57,6 @@ import {selectUsername, selectUserEmail, selectUserPhoto, setUserLoginDetails, s
         );
 
 
-
-
     };
 
     const handleAuth=()=>{
@@ -81,14 +65,11 @@ import {selectUsername, selectUserEmail, selectUserPhoto, setUserLoginDetails, s
             signInWithPopup(auth,provider).then((result)=>{
                 console.log(result);
                 setUser(result.user);
+
                 setActuallyNotLogged = false;
 
                 history("/home");
                 //setUSER_ACCESS("isLogged",false);
-
-
-
-
 
 
 
@@ -105,12 +86,8 @@ import {selectUsername, selectUserEmail, selectUserPhoto, setUserLoginDetails, s
                 history("/");
               //  setUSER_ACCESS("isLogged",false);
 
-
-
-
             }).catch((err)=>alert(err.message));
         }
-
     }
 
 
@@ -375,16 +352,9 @@ const SignOut=styled.div`
       transition-duration: 1s;
     }
   }
-    
-   
-
+  
 
 `;
-
-
-
-
-
 
 export default Header;
 

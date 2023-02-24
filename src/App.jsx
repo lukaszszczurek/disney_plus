@@ -12,6 +12,7 @@ import {useEffect} from "react";
 
 import {useSelector} from "react-redux";
 import {selectUserPhoto} from "./components/user/userSlice";
+import Video from "./components/Video";
 
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
             <Route path="/search" element={<Search/>}/>
             <Route path="/home" element={<Home/>}/>
              <Route path="/detail/:id" element={<Detail/>}/>
+                <Route path="/video/:id" element={<Video/>}/>
 
         </Routes>
 

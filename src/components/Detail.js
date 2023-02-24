@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import styled from "styled-components";
-import {useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import {collection, getDocs, setDoc, doc, onSnapshot,} from 'firebase/firestore'
 import db from "../firebase";
-
+import CardMedia from '@mui/material/CardMedia';
 
 
 import 'firebase/firestore';
@@ -20,7 +20,10 @@ function Detail(props) {
    //      });
    //  }
     const {id}=useParams();
-
+    
+        const history=useNavigate();
+        const movieUrl ="https://firebasestorage.googleapis.com/v0/b/disneyplus-cloneoff.appspot.com/o/penguins.mp4?alt=media&token=ea2379d2-feeb-42be-a5df-0fc848fd4051";
+        const [displayMovie,setDisplayMovie]= useState(false);
     const [DataDetail,SetDataDetail]=useState({});
 
     useEffect(()=>{
@@ -31,9 +34,7 @@ function Detail(props) {
 
                 if (doc.id===id){
                     SetDataDetail(doc.data());
-
                 }
-
             })
         })
 
@@ -43,6 +44,8 @@ function Detail(props) {
     return (
 
         <Container>
+
+            {/*{{setDisplayMovie:<CardMedia component={"video"} src={movieUrl}/> }}*/}
             <Background>
                 <img
                 src={DataDetail.backgroundImg}
@@ -61,24 +64,23 @@ function Detail(props) {
             </ImageTitle>
             <ContentMeta>
                 <Controls>
-                    <Player>
-                        <img src="/images/play-icon-black.png"/>
-                        <span>Play</span>
-                    </Player>
+
+                        <Player onClick={()=>{history("/video/" + id)}}>
+
+                            <img src="/images/play-icon-black.png"/>
+                            <span>Play</span>
+                        </Player>
 
                     <Trailer>
                         <img src="/images/play-icon-white.png"/>
                         <span>Trailer</span>
 
                     </Trailer>
-
                     <AddList>+</AddList>
                     <GroupWatch>
                         <img src="/images/group-icon.png"/>
                     </GroupWatch>
-
-
-
+                    <Like/>
 
                 </Controls>
                 <Subtitle>
@@ -254,6 +256,11 @@ const GroupWatch=styled(AddList)`
 
 
 
+`;
+const Like=styled(AddList)`
+
+   
+  
 `;
 
 const Subtitle=styled.div`

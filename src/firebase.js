@@ -27,20 +27,20 @@ import {
 
 const firebaseConfig = {
 
-    apiKey: process.env.REACT_APP_API_KEY,
+    apiKey: "AIzaSyDGLU8oArGZokCTgrOk8NctBvub9hqxzFQ",
 
 
-    authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+    authDomain: "disneyplus-cloneoff.firebaseapp.com",
 
-    projectId: process.env.REACT_APP_PROJECT_ID,
+    projectId: "disneyplus-cloneoff",
 
     storageBucket: "disneyplus-cloneoff.appspot.com",
 
     messagingSenderId: "913028895886",
 
-    appId: process.env.REACT_APP_ID,
+    appId: "1:913028895886:web:dcb8db88b53733e1ede5df",
 
-    measurementId:process.env.REACT_APP_MEASUREMENT_ID
+    measurementId:"G-QQ107DW1G1"
 
 };
 
