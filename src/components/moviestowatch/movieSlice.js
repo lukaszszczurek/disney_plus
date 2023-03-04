@@ -9,8 +9,6 @@ const initialState={
     trending:null,
     allMovies:null,
 
-
-
 };
 
 const movieSlice=createSlice({

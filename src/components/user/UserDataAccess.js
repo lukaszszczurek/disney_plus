@@ -1,10 +1,41 @@
+import {createSlice} from "@reduxjs/toolkit";
 
-// import {createGlobalState} from "react-hooks-global-state";
-//
-// const {USER_ACCESS,setUSER_ACCESS} = createGlobalState({
-//     isLogged : false,
-//     // rest data
-//
-// });
-// const [LOG,setLOG] = createGlobalState(false);
-// export {USER_ACCESS, setUSER_ACCESS,LOG,setLOG};
+ const initialState={
+     id:'',
+     liked:[''],
+    watchList:[''],
+
+ }
+
+
+ const userDataSlice=createSlice({
+     name:'userData',
+     initialState,
+
+     reducers:{
+         setUserDataDetails:(state,action)=>{
+             state.id=action.payload.id;
+             state.liked=action.payload.liked;
+             state.watchList=action.payload.watchList;
+
+         },
+
+         signOutProcessDataReset:(state)=>{
+             state.id=null;
+             state.liked=null;
+             state.watchList=null;
+
+         },
+     }
+ });
+
+
+ export const {setUserDataDetails,signOutProcessDataReset}=userDataSlice.actions;
+export const selectIdUserData=state=>state.userData.id;
+ // export const {selectIdUserData}=state=>state.;
+ export const selectLiked=(state)=>state.userData.liked;
+ export const selectWatchList=(state)=>state.userData.watchList;
+export default userDataSlice.reducer;
+
+
+

@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import styled from "styled-components";
-import {auth, provider} from "../firebase.js";
+import db, {auth, provider} from "../firebase.js";
+import {updateDoc, addDoc, getDocs} from "firebase/firestore";
 import {signInWithPopup} from "firebase/auth";
 
 
@@ -12,6 +13,9 @@ import { useNavigate} from "react-router-dom";
 
 //console.log(unstable_HistoryRouter);
 import {selectUsername, selectUserEmail, selectUserPhoto, setUserLoginDetails, setSignOutState} from "./user/userSlice";
+import {collection, doc, onSnapshot,deleteDoc,setDoc} from "firebase/firestore";
+import {setUserDataDetails, selectLiked, selectWatchList,signOutProcessDataReset} from "./user/UserDataAccess";
+import {selectOriginals} from "./moviestowatch/movieSlice";
 
 
 
@@ -22,26 +26,106 @@ import {selectUsername, selectUserEmail, selectUserPhoto, setUserLoginDetails, s
 
 
 
-    let [isActuallyNotLogged,setActuallyNotLogged]=useState(true)
+    let [isActuallyNotLogged,setActuallyNotLogged]=useState(false)
     const dispatch=useDispatch();
     const history=useNavigate();
     const UserName=useSelector(selectUsername);
     const UserPhoto=useSelector(selectUserPhoto);
+    const Originals=useSelector(selectOriginals)
+    const Liked=useSelector(selectLiked);
+    const movies=useSelector(selectOriginals)
+
+
+    // dispatch user data
+     const [createNewUserData,setCreateNewUserData]= useState(false);
+     const [currentId,setCurrentId]=useState(0);
+     const [userData,setUserData]=useState([]);
+
+    const updateData=(user)=>{
+
+        dispatch(
+            setUserDataDetails(
+                {
+                    userID:user.uid,
+                    liked:["aa","vv"],
+                    watchList:[]
+                })
+        )
+
+     }
+     const createNewUser=(newUserId)=>{
+
+        const userDataCollection=collection(db,'usersData');
+        addDoc(userDataCollection,{userId:newUserId,liked:[""],watchList:[""]})
+
+     }
+
+     const userDataAccessLogic = (user) => {
+
+            setActuallyNotLogged(true);
+         console.log("INITIAL:   " + isActuallyNotLogged)
+
+        onSnapshot(collection(db,'userData'),(snapshot)=>{
+            snapshot.docs.forEach((doc)=>{
+
+                if(user.uid===doc.id){
+                    console.log("IS_ACRUALL_NOT_lOGGED UID:   " + isActuallyNotLogged)
+                    dispatch(
+                        setUserDataDetails({
+                            id:doc.id,
+                            liked:doc.data().liked,
+                            watchList:doc.data().watchList,
+                            // zobaczyc zastosowanie dispatcha w przypadku usera auth i filmów
+
+
+                        })
+                    );
+                    setActuallyNotLogged(false);
+                    console.log("IS_ACRUALL_NOT_lOGGED:   " + isActuallyNotLogged)
+                    // return false;
+
+                }
+
+            })
+
+
+        })
+         console.log("IS_ACRUALL_NOT_lOGGED:   " + isActuallyNotLogged)
+
+         if(isActuallyNotLogged){
+             console.log("IS_ACRUALL_NOT_lOGGED _ IN IF..:   " + isActuallyNotLogged)
+             // adding new user data
+             setDoc(doc(db,'userData',user.uid),{
+                 liked:[''],
+                 watchList:['']
+
+             });
+             setActuallyNotLogged(false);
+             console.log("IS_ACRUALL_NOT_lOGGED:  __ OUT IF " + isActuallyNotLogged)
+
+         }
+     }
 
 
 
     useEffect(()=>{
 
-        auth.onAuthStateChanged(async (user)=>{
 
+        auth.onAuthStateChanged(async (user)=>{
             if(user){
                 setUser(user);
+
+
 
             }
         })
 
     },[UserPhoto]);
 
+
+    useEffect(()=>{
+
+    })
 
     const setUser=(user) => {
 
@@ -56,7 +140,7 @@ import {selectUsername, selectUserEmail, selectUserPhoto, setUserLoginDetails, s
         })
         );
 
-
+        //updateData(user);
     };
 
     const handleAuth=()=>{
@@ -65,13 +149,14 @@ import {selectUsername, selectUserEmail, selectUserPhoto, setUserLoginDetails, s
             signInWithPopup(auth,provider).then((result)=>{
                 console.log(result);
                 setUser(result.user);
+                userDataAccessLogic(result.user);
+
+
 
                 setActuallyNotLogged = false;
 
                 history("/home");
                 //setUSER_ACCESS("isLogged",false);
-
-
 
             }).catch((error)=>{
 
@@ -83,7 +168,9 @@ import {selectUsername, selectUserEmail, selectUserPhoto, setUserLoginDetails, s
 
             auth.signOut().then(()=>{
                 dispatch(setSignOutState());
+                //dispatch(signOutProcessDataReset());
                 history("/");
+
               //  setUSER_ACCESS("isLogged",false);
 
             }).catch((err)=>alert(err.message));
@@ -91,7 +178,6 @@ import {selectUsername, selectUserEmail, selectUserPhoto, setUserLoginDetails, s
     }
 
 
-     console.log(UserPhoto) ;
 
     return (
         <Nav>
@@ -104,9 +190,6 @@ import {selectUsername, selectUserEmail, selectUserPhoto, setUserLoginDetails, s
 
             {!UserPhoto ? (  <LoginButton onClick={handleAuth}>Login</LoginButton>
                 ):(
-
-
-
 
                     <>
                             <NavigationMenu>
@@ -137,7 +220,7 @@ import {selectUsername, selectUserEmail, selectUserPhoto, setUserLoginDetails, s
                             </a>
                             <a href={"/series"}>
                                 <img src="/images/series-icon.svg" alt="SERIES" />
-                                <span>SERIES</span>
+                                <span>SERIES </span>
                             </a>
 
                         </NavigationMenu>
@@ -149,10 +232,6 @@ import {selectUsername, selectUserEmail, selectUserPhoto, setUserLoginDetails, s
                                         </DropDown>
 
                                     </SignOut>
-
-
-
-
 
                     </>
             )}

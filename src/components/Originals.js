@@ -3,16 +3,21 @@ import styled from "styled-components";
 import {Link} from "react-router-dom";
 import {selectOriginals} from "./moviestowatch/movieSlice";
 import {useSelector} from "react-redux";
+import {selectLiked} from "./user/UserDataAccess";
 
 
 function Originals(props) {
     const movies=useSelector(selectOriginals);
+    const liked=useSelector(selectLiked)
     return (
         <Container>
-            <h4>Originals</h4>
+            {/*<h4>Originals</h4>*/}
 
+            <h4>{liked[0]}</h4>
             <Content>
+
                 {
+
                     movies &&
                     movies.map((movie, key) => (
 
@@ -20,6 +25,7 @@ function Originals(props) {
                             {movie.id}
                             <Link to={`/detail/` + movie.id}>
                                 <img src={movie.cardImg} alt={movie.title} />
+                                <div></div>
                             </Link>
                         </Wrap>
                     ))}

@@ -47,10 +47,6 @@ function Home(props) {
                                RepeatMovie=false;
                            }
 
-                          // console.log(a+'😀')
-
-
-
                            if(!RepeatMovie){
                                array.push(doc.id);
                               // console.log(a+'😀')

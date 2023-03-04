@@ -1,13 +1,21 @@
 import React, {useEffect, useState} from 'react';
 import styled from "styled-components";
 import {Link, useNavigate, useParams} from "react-router-dom";
-import {collection, getDocs, setDoc, doc, onSnapshot,} from 'firebase/firestore'
+import {collection, getDocs, setDoc, doc,updateDoc, onSnapshot,} from 'firebase/firestore'
 import db from "../firebase";
-import CardMedia from '@mui/material/CardMedia';
 
+import CardMedia from '@mui/material/CardMedia';
 
 import 'firebase/firestore';
 import 'firebase/auth';
+
+
+// icons
+import AddIcon from '@mui/icons-material/Add';
+import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import {white} from "mui/source/styles/colors";
+import {colors} from "@mui/material";
 
 
 
@@ -19,12 +27,34 @@ function Detail(props) {
    //          window.history.pushState(null, document.title,  window.location.href);
    //      });
    //  }
+    const [likeStatus,setLikeStatus]=useState(false);
+
+
+
     const {id}=useParams();
     
         const history=useNavigate();
         const movieUrl ="https://firebasestorage.googleapis.com/v0/b/disneyplus-cloneoff.appspot.com/o/penguins.mp4?alt=media&token=ea2379d2-feeb-42be-a5df-0fc848fd4051";
         const [displayMovie,setDisplayMovie]= useState(false);
     const [DataDetail,SetDataDetail]=useState({});
+
+    // like logic
+
+    const changeStatusLogic =  (currentNumber)=>{
+
+        if(likeStatus){
+            const movieDoc = doc(db,'movies',id);
+            const editField= {likes:currentNumber-1};
+            updateDoc(movieDoc,editField);
+        }
+        else if(!likeStatus){
+            const movieDoc = doc(db,'movies',id);
+            const editField= {likes:currentNumber+1};
+            updateDoc(movieDoc,editField);
+        }
+        setLikeStatus(!likeStatus);
+    }
+
 
     useEffect(()=>{
         // componentDidMount();
@@ -40,6 +70,7 @@ function Detail(props) {
 
 
     },[id])
+
 
     return (
 
@@ -76,11 +107,19 @@ function Detail(props) {
                         <span>Trailer</span>
 
                     </Trailer>
-                    <AddList>+</AddList>
+                    <AddList>
+                        <AddIcon sx={{color:white}}/>
+                    </AddList>
                     <GroupWatch>
-                        <img src="/images/group-icon.png"/>
+                        <img src="/images/group-icon.png" />
                     </GroupWatch>
-                    <Like/>
+                    <Like onClick={()=>
+                    { changeStatusLogic(DataDetail.likes);
+                    }}
+                    >
+                         {likeStatus ? (<ThumbUpIcon sx={{color:white}}/>):(<ThumbUpOffAltIcon sx={{color:white}}/>)}
+
+                    </Like>
 
                 </Controls>
                 <Subtitle>
@@ -91,7 +130,6 @@ function Detail(props) {
                     {DataDetail.description}
                 </Description>
             </ContentMeta>
-
         </Container>
     );
 }
@@ -155,8 +193,6 @@ const ImageTitle=styled.div`
       width: 35vw;
       margin-top: 20vh;
     }
-    
-    
   }
 
 `;
@@ -164,7 +200,6 @@ const ImageTitle=styled.div`
 const ContentMeta = styled.div`
   max-width: 874px;
   
-
 `;
 
 const Controls = styled.div`
@@ -221,7 +256,7 @@ const Trailer = styled(Player)`
 
 
 
-const AddList = styled.div`
+const AddList = styled.button`
   margin-top: 0;
   font-size: 40px;
   margin-right: 16px;
@@ -230,10 +265,11 @@ const AddList = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(3, 3, 3, 0.26);
   border-radius: 50%;
-  border: 2px solid white;
+  border: 2px solid #ffffff;
   cursor: pointer;
+
   span {
     background-color: rgb(249, 249, 249);
     display: inline-block;
@@ -258,9 +294,10 @@ const GroupWatch=styled(AddList)`
 
 `;
 const Like=styled(AddList)`
-
-   
   
+
+
+
 `;
 
 const Subtitle=styled.div`

@@ -14,8 +14,10 @@ function Video(props) {
     useEffect(()=>{
         onSnapshot(collection(db,'movies'),snapshot => {
             snapshot.docs.forEach((doc)=>{
+
                 if(doc.id===id){
                     setData(doc.data())
+
                 }
             })
         })
