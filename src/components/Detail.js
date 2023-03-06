@@ -16,6 +16,8 @@ import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import {white} from "mui/source/styles/colors";
 import {colors} from "@mui/material";
+import {useSelector} from "react-redux";
+import {selectLiked} from "./user/UserDataAccess";
 
 
 
@@ -27,11 +29,17 @@ function Detail(props) {
    //          window.history.pushState(null, document.title,  window.location.href);
    //      });
    //  }
-    const [likeStatus,setLikeStatus]=useState(false);
+
 
 
 
     const {id}=useParams();
+    const [likeStatus,setLikeStatus]=useState(false);
+    const [lastStateFromBase,setLastStateFromBase]= useState(false)
+
+    // slices
+
+    const Liked=useSelector(selectLiked);
     
         const history=useNavigate();
         const movieUrl ="https://firebasestorage.googleapis.com/v0/b/disneyplus-cloneoff.appspot.com/o/penguins.mp4?alt=media&token=ea2379d2-feeb-42be-a5df-0fc848fd4051";
@@ -59,6 +67,7 @@ function Detail(props) {
     useEffect(()=>{
         // componentDidMount();
 
+
         onSnapshot(collection(db,'movies'),(snapshot)=>{
             snapshot.docs.forEach((doc) => {
 
@@ -68,8 +77,39 @@ function Detail(props) {
             })
         })
 
+        // onSnapshot(collection(db,'userData'),(snapshot)=>{
+        //     snapshot.docs.forEach((iter) => {
+        //         console.log(Liked[0])
+        //         if(Liked[iter] === id){
+        //             console.log("JSON2")
+        //
+        //             setLikeStatus(true);
+        //
+        //
+        //         }
+        //     })
+        // })
+
+
 
     },[id])
+
+
+    useEffect(()=>{
+        console.log(likeStatus + ": LIKE status")
+        console.log("ID: " + id)
+        console.log("LIKED[0]" + Liked[0])
+        console.log("LIKED.SIZE" + Liked.length)
+        for (var i=0;i < Liked.length;i++){
+            console.log("w")
+            if(Liked[i] === id){
+                setLikeStatus(true);
+
+            }
+        }
+    })
+
+
 
 
     return (

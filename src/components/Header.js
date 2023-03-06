@@ -80,7 +80,7 @@ import {selectOriginals} from "./moviestowatch/movieSlice";
 
                         })
                     );
-                    setActuallyNotLogged(false);
+                     setActuallyNotLogged(false);
                     console.log("IS_ACRUALL_NOT_lOGGED:   " + isActuallyNotLogged)
                     // return false;
 
@@ -114,6 +114,9 @@ import {selectOriginals} from "./moviestowatch/movieSlice";
         auth.onAuthStateChanged(async (user)=>{
             if(user){
                 setUser(user);
+               userDataAccessLogic(user)
+
+
 
 
 
@@ -142,6 +145,20 @@ import {selectOriginals} from "./moviestowatch/movieSlice";
 
         //updateData(user);
     };
+
+    const setData=(user) =>{
+        dispatch(
+            setUserDataDetails({
+                id:doc.id,
+                liked:doc.data().liked,
+                watchList:doc.data().watchList,
+                // zobaczyc zastosowanie dispatcha w przypadku usera auth i filmów
+
+
+            })
+        );
+
+    }
 
     const handleAuth=()=>{
 
@@ -220,7 +237,7 @@ import {selectOriginals} from "./moviestowatch/movieSlice";
                             </a>
                             <a href={"/series"}>
                                 <img src="/images/series-icon.svg" alt="SERIES" />
-                                <span>SERIES </span>
+                                <span>SERIES</span>
                             </a>
 
                         </NavigationMenu>
