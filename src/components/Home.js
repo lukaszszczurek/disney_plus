@@ -34,7 +34,9 @@ function Home(props) {
     let array=[];
 
 
+
     useEffect(()=>{
+
 
 
                onSnapshot(collection(db,'movies'),(snapshot)=>{
@@ -49,8 +51,6 @@ function Home(props) {
 
                            if(!RepeatMovie){
                                array.push(doc.id);
-                              // console.log(a+'😀')
-                              // console.log(array+'🙃');
 
 
                                switch(doc.data().type){
@@ -81,7 +81,7 @@ function Home(props) {
                                }
 
                            }
-                           // console.log(recommends);
+
 
                        });
                    dispatch(setMovies({
@@ -89,6 +89,8 @@ function Home(props) {
                            newDisney:newdisneys,
                            original:originals,
                            trending:trending,
+                       //
+                            allMovies:allMovies,
 
                        })
                    );

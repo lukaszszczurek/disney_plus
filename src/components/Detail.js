@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import styled from "styled-components";
 import {Link, useNavigate, useParams} from "react-router-dom";
-import {collection, getDocs, setDoc, doc,updateDoc, onSnapshot,} from 'firebase/firestore'
+import {collection, getDocs, setDoc, doc,updateDoc, onSnapshot,arrayRemove,arrayUnion} from 'firebase/firestore'
 import db from "../firebase";
 
 import CardMedia from '@mui/material/CardMedia';
@@ -13,38 +13,34 @@ import 'firebase/auth';
 // icons
 import AddIcon from '@mui/icons-material/Add';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
+import BookmarkRemoveIcon from '@mui/icons-material/BookmarkRemove';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import {white} from "mui/source/styles/colors";
 import {colors} from "@mui/material";
 import {useSelector} from "react-redux";
-import {selectLiked} from "./user/UserDataAccess";
+import {selectLiked, selectWatchList} from "./user/UserDataAccess";
 
 
-
+import {selectIdUserData} from "./user/UserDataAccess";
+import watchList from "./WatchList";
 
 function Detail(props) {
-   // function componentDidMount() {
-   //      window.history.pushState(null, document.title, window.location.href);
-   //      window.addEventListener('popstate', function (event){
-   //          window.history.pushState(null, document.title,  window.location.href);
-   //      });
-   //  }
 
 
 
+        const {id}=useParams();
+        const [likeStatus,setLikeStatus]=useState(false);
+        const [lastStateFromBase,setLastStateFromBase]= useState(false);
+        const [onWatchListStatus,setonWatchList] = useState(false);
 
-    const {id}=useParams();
-    const [likeStatus,setLikeStatus]=useState(false);
-    const [lastStateFromBase,setLastStateFromBase]= useState(false)
 
-    // slices
+        const Liked=useSelector(selectLiked);
+        const ListToWatch=useSelector(selectWatchList);
+        const UserId=useSelector(selectIdUserData);
 
-    const Liked=useSelector(selectLiked);
-    
         const history=useNavigate();
-        const movieUrl ="https://firebasestorage.googleapis.com/v0/b/disneyplus-cloneoff.appspot.com/o/penguins.mp4?alt=media&token=ea2379d2-feeb-42be-a5df-0fc848fd4051";
         const [displayMovie,setDisplayMovie]= useState(false);
-    const [DataDetail,SetDataDetail]=useState({});
+        const [DataDetail,SetDataDetail]=useState(false);
 
     // like logic
 
@@ -54,19 +50,50 @@ function Detail(props) {
             const movieDoc = doc(db,'movies',id);
             const editField= {likes:currentNumber-1};
             updateDoc(movieDoc,editField);
+
+
+            const userDataDoc=doc(db,'userData',UserId);
+
+           updateDoc(userDataDoc,{ liked:arrayRemove(id)})
+
         }
         else if(!likeStatus){
             const movieDoc = doc(db,'movies',id);
             const editField= {likes:currentNumber+1};
             updateDoc(movieDoc,editField);
+
+            const userDataDoc=doc(db,'userData',UserId);
+            updateDoc(userDataDoc,{ liked:arrayUnion(id)})
+            // dodaj do tablicy
         }
         setLikeStatus(!likeStatus);
     }
 
 
-    useEffect(()=>{
-        // componentDidMount();
+    // add to watchlist
 
+    const addToWatchlist = (movie_id) =>{
+       if(onWatchListStatus){
+           const docPath= doc(db,'userData',UserId);
+           const operation = {watchList: arrayRemove(movie_id)}
+
+           updateDoc(docPath,operation);
+
+
+       }
+      else if(!onWatchListStatus){
+           const docPath= doc(db,'userData',UserId);
+           const operation = {watchList: arrayUnion(movie_id)}
+
+           updateDoc(docPath,operation)
+
+       }
+        setonWatchList(!onWatchListStatus);
+
+    }
+
+
+    useEffect(()=>{
 
         onSnapshot(collection(db,'movies'),(snapshot)=>{
             snapshot.docs.forEach((doc) => {
@@ -77,38 +104,29 @@ function Detail(props) {
             })
         })
 
-        // onSnapshot(collection(db,'userData'),(snapshot)=>{
-        //     snapshot.docs.forEach((iter) => {
-        //         console.log(Liked[0])
-        //         if(Liked[iter] === id){
-        //             console.log("JSON2")
-        //
-        //             setLikeStatus(true);
-        //
-        //
-        //         }
-        //     })
-        // })
-
 
 
     },[id])
 
 
     useEffect(()=>{
-        console.log(likeStatus + ": LIKE status")
-        console.log("ID: " + id)
-        console.log("LIKED[0]" + Liked[0])
-        console.log("LIKED.SIZE" + Liked.length)
-        for (var i=0;i < Liked.length;i++){
-            console.log("w")
-            if(Liked[i] === id){
-                setLikeStatus(true);
 
+
+        for (var i=0;i < Liked.length;i++){
+
+            if(Liked[i] === id){
+
+                setLikeStatus(true);
+            }
+        }
+        for (var j=0;j < ListToWatch.length;j++){
+            console.log("PI")
+            if(ListToWatch[j] === id){
+
+                setonWatchList(true);
             }
         }
     })
-
 
 
 
@@ -148,7 +166,11 @@ function Detail(props) {
 
                     </Trailer>
                     <AddList>
-                        <AddIcon sx={{color:white}}/>
+                        {onWatchListStatus?
+                            (<BookmarkRemoveIcon onClick={()=>addToWatchlist(id)} sx={{color:white}}/>)
+                            :
+                            (<AddIcon onClick={()=>addToWatchlist(id)} sx={{color:white}}/>)}
+
                     </AddList>
                     <GroupWatch>
                         <img src="/images/group-icon.png" />
@@ -309,6 +331,15 @@ const AddList = styled.button`
   border-radius: 50%;
   border: 2px solid #ffffff;
   cursor: pointer;
+
+  &:hover {
+    opacity: 0.9;
+    scale: 1.07;
+    background-color: #194545;
+
+
+  }
+
 
   span {
     background-color: rgb(249, 249, 249);

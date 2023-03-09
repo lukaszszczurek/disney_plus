@@ -15,7 +15,7 @@ import { useNavigate} from "react-router-dom";
 import {selectUsername, selectUserEmail, selectUserPhoto, setUserLoginDetails, setSignOutState} from "./user/userSlice";
 import {collection, doc, onSnapshot,deleteDoc,setDoc} from "firebase/firestore";
 import {setUserDataDetails, selectLiked, selectWatchList,signOutProcessDataReset} from "./user/UserDataAccess";
-import {selectOriginals} from "./moviestowatch/movieSlice";
+import {selectOriginals, setMovies} from "./moviestowatch/movieSlice";
 
 
 
@@ -36,10 +36,12 @@ import {selectOriginals} from "./moviestowatch/movieSlice";
     const movies=useSelector(selectOriginals)
 
 
+
     // dispatch user data
      const [createNewUserData,setCreateNewUserData]= useState(false);
      const [currentId,setCurrentId]=useState(0);
      const [userData,setUserData]=useState([]);
+     let movieS=[];
 
     const updateData=(user)=>{
 
@@ -109,6 +111,7 @@ import {selectOriginals} from "./moviestowatch/movieSlice";
 
 
     useEffect(()=>{
+
 
 
         auth.onAuthStateChanged(async (user)=>{
@@ -448,8 +451,6 @@ const SignOut=styled.div`
       transition-duration: 1s;
     }
   }
-  
-
 `;
 
 export default Header;
