@@ -87,6 +87,7 @@ function Detail(props) {
 
            updateDoc(docPath,operation)
 
+
        }
         setonWatchList(!onWatchListStatus);
 

@@ -30,7 +30,10 @@ function App() {
           <Header/>
 
         <Routes>
+
           <Route exact path="/" element={<Login/>}/>
+
+
             <Route path="/search" element={<Search/>}/>
             <Route path="/home" element={<Home/>}/>
             <Route path="/e4e5" element={<EditUser/>}/>

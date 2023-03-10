@@ -8,6 +8,9 @@ import db from "../firebase";
 import {Link} from "react-router-dom";
 import {selectUserPhoto} from "./user/userSlice";
 import WatchListMovies from "./WatchListMovies";
+import Originals from "./Originals";
+import {Typography} from "@mui/material";
+
 
 function WatchList(props) {
 
@@ -16,22 +19,31 @@ function WatchList(props) {
         const userPhoto=useSelector(selectUserPhoto);
         const dispatch=useDispatch();
 
-        const [movies,setMovies] = useState([])
-        //let movies=[];
+
+        //const [movies,setMovies] = useState([])
+        let movies=[];
         const usersCollectionRef = collection(db, "movies");
 
 
 
     useEffect(()=>{
-        const getData =()=>{
-            const data =  getDocs(usersCollectionRef);
-            setMovies(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-            console.log("XX" + movies)
 
-        }
-        //getData();
 
-    },[])
+        onSnapshot(collection(db,'movies'),(snapshot)=>{
+            snapshot.docs.forEach((doc)=>{
+                movies=[...movies,{id:doc.id,...doc.data()}];
+
+
+            })
+            dispatch(setMovies({
+                allMovies:movies
+            }))
+
+        })
+
+
+
+    },[userPhoto])
 
 
 
@@ -69,6 +81,8 @@ const TitleH1 = styled.h1`
   
   justify-content: center;
   text-align: center;
+  font-family:"Georgia Pro Cond Light";
+  font-size: 50px;
   
 `;
 
