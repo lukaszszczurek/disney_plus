@@ -230,9 +230,9 @@ import {selectOriginals, setMovies} from "./moviestowatch/movieSlice";
                                 <img src="/images/watchlist-icon.svg" alt="WATCHLIST" />
                                 <span>WATCHLIST</span>
                             </a>
-                            <a href={"/originals"}>
+                            <a href={"/ratings"}>
                                 <img src="/images/original-icon.svg" alt="ORIGINALS" />
-                                <span>ORIGINALS</span>
+                                <span>RATINGS</span>
                             </a>
                             <a href={"/movies"}>
                                 <img src="/images/movie-icon.svg" alt="MOVIES" />

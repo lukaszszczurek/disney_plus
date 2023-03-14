@@ -22,6 +22,7 @@ function WatchList(props) {
 
         //const [movies,setMovies] = useState([])
         let movies=[];
+        let array=[];
         const usersCollectionRef = collection(db, "movies");
 
 
@@ -31,7 +32,23 @@ function WatchList(props) {
 
         onSnapshot(collection(db,'movies'),(snapshot)=>{
             snapshot.docs.forEach((doc)=>{
-                movies=[...movies,{id:doc.id,...doc.data()}];
+
+                let RepeatMovie=false;
+                if(array.includes(doc.id)){
+                    RepeatMovie=true;
+                }
+                else if(!array.includes(doc.id)){
+                    RepeatMovie=false;
+                }
+
+                if(!RepeatMovie){
+                    array.push(doc.id)
+                    movies=[...movies,{id:doc.id,...doc.data()}];
+                }
+
+
+
+
 
 
             })

@@ -19,10 +19,22 @@ function SearchInput(props) {
         {/*    <InputStyled onChange={(e)=>setTitleInput(e.target.value)} />*/}
 
             {/*<input/>*/}
-            <TextField id="outlined-basic" label="Outlined" onChange={(e)=>setTitleInput(e.target.value)} variant="outlined" sx={
-                {
-                    color:'white',
-                    bgcolor:'white',
+            <TextField variant={"standard"} id="searchField" type={"text"}
+                       fullWidth={true} color={"warning"} placeholder={"search..."}  onChange={(e)=>setTitleInput(e.target.value)}
+                       sx={{
+                           border:'10px',
+                           fontSize:'15px',
+                           input:{
+                               fontFamily:"sans-serf",
+                               color:"white",
+                               height:"10vh",
+                               fontSize:"8vh",
+                               opacity:'0.7',
+                               cursor:'type'
+                           }
+
+
+
 
                 }} />
             <Content>
@@ -56,6 +68,7 @@ const InputStyled=styled.input`
   font-size: 8vh;
   align-content: center;
   margin-left: 15vw;
+
   
   
   
@@ -105,6 +118,7 @@ const Content=styled.div`
     display: grid;
     grid-gap: 25px;
     gap: 25px;
+    padding-top: 30px;
   
     grid-template-columns: repeat(4,minmax(0,1fr));
   

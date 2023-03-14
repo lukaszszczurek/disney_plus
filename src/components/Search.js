@@ -10,12 +10,14 @@ import {selectUserPhoto} from "./user/userSlice";
 import {collection, onSnapshot} from "firebase/firestore";
 import db from "../firebase";
 import SearchInput from "./SearchInput";
+import {useContext} from "react";
 
 function Search(props) {
      const moviesOriginal = useSelector(selectOriginals);
     const dispatch=useDispatch();
     const userPhoto=useSelector(selectUserPhoto);
     //const UserName=useSelector(selectUsername);
+
     let recommends=[];
 
     let newdisneys=[];
