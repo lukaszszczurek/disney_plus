@@ -10,7 +10,7 @@ const Login=(props)=>
              <ContAction>
                  <ConstActionImg src="/images/cta-disney-hulu-removebg-preview.png" alt=" " />
 
-                 <SignUp>GET THERE</SignUp>
+                 <SignUp onClick={()=>{alert("Login first")}}>GET THERE</SignUp>
 
                  <Description>
 
@@ -40,6 +40,7 @@ const Container=styled.section`
 
 
 `;
+
 
 const Content=styled.div`
     margin-bottom: 10vw;

@@ -1,0 +1,7 @@
+.alert{
+    background: #ffdb9b;
+    padding: 20px 40px;
+    max-width: 400px;
+    border-radius: 4px;
+    font-family: sans-serif;
+}

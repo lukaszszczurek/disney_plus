@@ -18,6 +18,8 @@ import db from "../firebase";
 import "firebase/firestore";
 import "firebase/auth";
 
+
+import {FacebookShareButton} from "react-share";
 // icons
 import AddIcon from "@mui/icons-material/Add";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
@@ -42,6 +44,8 @@ function Detail(props) {
   const history = useNavigate();
   const [displayMovie, setDisplayMovie] = useState(false);
   const [DataDetail, SetDataDetail] = useState(false);
+
+  const href= window.location.href;
 
   // like logic
 
@@ -144,9 +148,16 @@ function Detail(props) {
               />
             )}
           </AddList>
-          <GroupWatch>
-            <img src="/images/group-icon.png" />
-          </GroupWatch>
+
+          <FacebookShareButton url={href}
+          >
+            <GroupWatch>
+
+              <img src="/images/group-icon.png" />
+            </GroupWatch>
+
+          </FacebookShareButton>
+
           <Like
             onClick={() => {
               changeStatusLogic(DataDetail.likes);
