@@ -32,7 +32,6 @@ import {createSlice} from "@reduxjs/toolkit";
 
  export const {setUserDataDetails,signOutProcessDataReset}=userDataSlice.actions;
 export const selectIdUserData=state=>state.userData.id;
- // export const {selectIdUserData}=state=>state.;
  export const selectLiked=(state)=>state.userData.liked;
  export const selectWatchList=(state)=>state.userData.watchList;
 export default userDataSlice.reducer;

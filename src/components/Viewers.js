@@ -3,31 +3,31 @@ import styled from "styled-components";
 const Viewers=(props)=> {
     return (
         <Container>
-            <Wrap>
+            <Wrap href={'https://www.disney.pl/'}>
                 <img src="/images/viewers-disney.png" alt=""/>
                 <video autoPlay={true} loop={true} playsInline={true}>
                     <source src="/movies/1564674844-disney.mp4" type="video/mp4"/>
                 </video>
             </Wrap>
-            <Wrap>
+            <Wrap href={'https://www.disney.pl/filmy/pixar'}>
                 <img src="/images/viewers-pixar.png" alt=""/>
                 <video autoPlay={true} loop={true} playsInline={true}>
                     <source src="/movies/1564676714-pixar.mp4" type="video/mp4"/>
                 </video>
             </Wrap>
-            <Wrap>
+            <Wrap href={'https://www.marvel.com/movies'}>
                 <img src="/images/viewers-marvel.png" alt=""/>
                 <video autoPlay={true} loop={true} playsInline={true}>
                     <source src="/movies/1564676115-marvel.mp4" type="video/mp4"/>
                 </video>
             </Wrap>
-            <Wrap>
+            <Wrap href={'https://www.starwars.com/'}>
                 <img src="/images/viewers-starwars.png" alt=""/>
                 <video autoPlay={true} loop={true} playsInline={true}>
                     <source src="/movies/1608229455-star-wars.mp4" type="video/mp4"/>
                 </video>
             </Wrap>
-            <Wrap>
+            <Wrap href={'https://www.natgeotv.com/pl'}>
                 <img src="/images/viewers-national.png" alt=""/>
                 <video autoPlay={true} loop={true} playsInline={true}>
                     <source
@@ -52,7 +52,7 @@ const Container = styled.div`
       }
 `;
 
-const Wrap=styled.div`
+const Wrap=styled.a`
   padding-top: 56.25%;
   border-radius: 10px;
   box-shadow: rgb(0 0 0 / 69%) 0px 26px 30px -10px,

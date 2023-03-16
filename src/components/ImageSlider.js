@@ -19,35 +19,32 @@ function ImageSlider(props) {
 
             <Carousel {...settings}>
 
-
                 <Wrap>
-                    <a>
+                    <a href={'https://www.disneyplus.com/pl-pl/brand/disney'}>
                         <img src="/images/slider-badging.jpg" alt=""/>
                     </a>
                 </Wrap>
 
 
                 <Wrap>
-                    <a>
+                    <a href={'https://www.disneyplus.com/pl-pl/brand/disney'}>
                         <img src="/images/slider-scale.jpg" alt=""/>
                     </a>
                 </Wrap>
 
 
                 <Wrap>
-                    <a>
+                    <a href={'https://www.disneyplus.com/pl-pl/brand/disney'}>
                         <img src="/images/slider-badag.jpg" alt=""/>
                     </a>
                 </Wrap>
 
 
                 <Wrap>
-                    <a>
+                    <a href={'https://www.disneyplus.com/pl-pl/brand/disney'}>
                         <img src="/images/slider-scales.jpg" alt=""/>
                     </a>
                 </Wrap>
-
-
 
 
             </Carousel>

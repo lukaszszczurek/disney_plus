@@ -1,268 +1,232 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import {Link, useNavigate, useParams} from "react-router-dom";
-import {collection, getDocs, setDoc, doc,updateDoc, onSnapshot,arrayRemove,arrayUnion} from 'firebase/firestore'
+import { Link, useNavigate, useParams } from "react-router-dom";
+import {
+  collection,
+  getDocs,
+  setDoc,
+  doc,
+  updateDoc,
+  onSnapshot,
+  arrayRemove,
+  arrayUnion,
+} from "firebase/firestore";
 import db from "../firebase";
 
-import CardMedia from '@mui/material/CardMedia';
 
-import 'firebase/firestore';
-import 'firebase/auth';
 
+import "firebase/firestore";
+import "firebase/auth";
 
 // icons
-import AddIcon from '@mui/icons-material/Add';
-import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
-import BookmarkRemoveIcon from '@mui/icons-material/BookmarkRemove';
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
-import {white} from "mui/source/styles/colors";
-import {colors} from "@mui/material";
-import {useSelector} from "react-redux";
-import {selectLiked, selectWatchList} from "./user/UserDataAccess";
+import AddIcon from "@mui/icons-material/Add";
+import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
+import BookmarkRemoveIcon from "@mui/icons-material/BookmarkRemove";
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+import { white } from "mui/source/styles/colors";
+import { useSelector } from "react-redux";
+import { selectLiked, selectWatchList } from "./user/UserDataAccess";
 
-
-import {selectIdUserData} from "./user/UserDataAccess";
-import watchList from "./WatchList";
+import { selectIdUserData } from "./user/UserDataAccess";
 
 function Detail(props) {
+  const { id } = useParams();
+  const [likeStatus, setLikeStatus] = useState(false);
+  const [lastStateFromBase, setLastStateFromBase] = useState(false);
+  const [onWatchListStatus, setonWatchList] = useState(false);
 
+  const Liked = useSelector(selectLiked);
+  const ListToWatch = useSelector(selectWatchList);
+  const UserId = useSelector(selectIdUserData);
 
+  const history = useNavigate();
+  const [displayMovie, setDisplayMovie] = useState(false);
+  const [DataDetail, SetDataDetail] = useState(false);
 
-        const {id}=useParams();
-        const [likeStatus,setLikeStatus]=useState(false);
-        const [lastStateFromBase,setLastStateFromBase]= useState(false);
-        const [onWatchListStatus,setonWatchList] = useState(false);
+  // like logic
 
+  const changeStatusLogic = (currentNumber) => {
+    if (likeStatus) {
+      const movieDoc = doc(db, "movies", id);
+      const editField = { likes: currentNumber - 1 };
+      updateDoc(movieDoc, editField);
 
-        const Liked=useSelector(selectLiked);
-        const ListToWatch=useSelector(selectWatchList);
-        const UserId=useSelector(selectIdUserData);
+      const userDataDoc = doc(db, "userData", UserId);
 
-        const history=useNavigate();
-        const [displayMovie,setDisplayMovie]= useState(false);
-        const [DataDetail,SetDataDetail]=useState(false);
+      updateDoc(userDataDoc, { liked: arrayRemove(id) });
+    } else if (!likeStatus) {
+      const movieDoc = doc(db, "movies", id);
+      const editField = { likes: currentNumber + 1 };
+      updateDoc(movieDoc, editField);
 
-    // like logic
-
-    const changeStatusLogic =  (currentNumber)=>{
-
-        if(likeStatus){
-            const movieDoc = doc(db,'movies',id);
-            const editField= {likes:currentNumber-1};
-            updateDoc(movieDoc,editField);
-
-
-            const userDataDoc=doc(db,'userData',UserId);
-
-           updateDoc(userDataDoc,{ liked:arrayRemove(id)})
-
-        }
-        else if(!likeStatus){
-            const movieDoc = doc(db,'movies',id);
-            const editField= {likes:currentNumber+1};
-            updateDoc(movieDoc,editField);
-
-            const userDataDoc=doc(db,'userData',UserId);
-            updateDoc(userDataDoc,{ liked:arrayUnion(id)})
-            // dodaj do tablicy
-        }
-        setLikeStatus(!likeStatus);
-    }
-
-
-    // add to watchlist
-
-    const addToWatchlist = (movie_id) =>{
-       if(onWatchListStatus){
-           const docPath= doc(db,'userData',UserId);
-           const operation = {watchList: arrayRemove(movie_id)}
-
-           updateDoc(docPath,operation);
-
-
-       }
-      else if(!onWatchListStatus){
-           const docPath= doc(db,'userData',UserId);
-           const operation = {watchList: arrayUnion(movie_id)}
-
-           updateDoc(docPath,operation)
-
-
-       }
-        setonWatchList(!onWatchListStatus);
+      const userDataDoc = doc(db, "userData", UserId);
+      updateDoc(userDataDoc, { liked: arrayUnion(id) });
 
     }
+    setLikeStatus(!likeStatus);
+  };
 
+  // add to watchlist
 
-    useEffect(()=>{
+  const addToWatchlist = (movie_id) => {
+    if (onWatchListStatus) {
+      const docPath = doc(db, "userData", UserId);
+      const operation = { watchList: arrayRemove(movie_id) };
 
-        onSnapshot(collection(db,'movies'),(snapshot)=>{
-            snapshot.docs.forEach((doc) => {
+      updateDoc(docPath, operation);
+    } else if (!onWatchListStatus) {
+      const docPath = doc(db, "userData", UserId);
+      const operation = { watchList: arrayUnion(movie_id) };
 
-                if (doc.id===id){
-                    SetDataDetail(doc.data());
-                }
-            })
-        })
+      updateDoc(docPath, operation);
+    }
+    setonWatchList(!onWatchListStatus);
+  };
 
-
-
-    },[id])
-
-
-    useEffect(()=>{
-
-
-        for (var i=0;i < Liked.length;i++){
-
-            if(Liked[i] === id){
-
-                setLikeStatus(true);
-            }
+  useEffect(() => {
+    onSnapshot(collection(db, "movies"), (snapshot) => {
+      snapshot.docs.forEach((doc) => {
+        if (doc.id === id) {
+          SetDataDetail(doc.data());
         }
-        for (var j=0;j < ListToWatch.length;j++){
-            console.log("PI")
-            if(ListToWatch[j] === id){
+      });
+    });
+  }, [id]);
 
-                setonWatchList(true);
-            }
-        }
-    })
+  useEffect(() => {
+    for (var i = 0; i < Liked.length; i++) {
+      if (Liked[i] === id) {
+        setLikeStatus(true);
+      }
+    }
+    for (var j = 0; j < ListToWatch.length; j++) {
+      if (ListToWatch[j] === id) {
+        setonWatchList(true);
+      }
+    }
+  }, []);
 
+  return (
+    <Container>
 
+      <Background>
+        <img src={DataDetail.backgroundImg} alt={DataDetail.title} />
+      </Background>
 
-    return (
+      <ImageTitle>
+        <img src={DataDetail.titleImg} alt={DataDetail.title} />
+      </ImageTitle>
+      <ContentMeta>
+        <Controls>
+          <Player
+            onClick={() => {
+              history("/video/" + id);
+            }}
+          >
+            <img src="/images/play-icon-black.png" />
+            <span>Play</span>
+          </Player>
 
-        <Container>
+          <Trailer>
+            <img src="/images/play-icon-white.png" />
+            <span>Trailer</span>
+          </Trailer>
+          <AddList>
+            {onWatchListStatus ? (
+              <BookmarkRemoveIcon
+                onClick={() => addToWatchlist(id)}
+                sx={{ color: white }}
+              />
+            ) : (
+              <AddIcon
+                onClick={() => addToWatchlist(id)}
+                sx={{ color: white }}
+              />
+            )}
+          </AddList>
+          <GroupWatch>
+            <img src="/images/group-icon.png" />
+          </GroupWatch>
+          <Like
+            onClick={() => {
+              changeStatusLogic(DataDetail.likes);
+            }}
+          >
+            {likeStatus ? (
+              <ThumbUpIcon sx={{ color: white }} />
+            ) : (
+              <ThumbUpOffAltIcon sx={{ color: white }} />
+            )}
+          </Like>
+        </Controls>
+        <Subtitle>{DataDetail.subTitle}</Subtitle>
 
-            {/*{{setDisplayMovie:<CardMedia component={"video"} src={movieUrl}/> }}*/}
-            <Background>
-                <img
-                src={DataDetail.backgroundImg}
-                alt={DataDetail.title}
-                />
-
-            </Background>
-
-            <ImageTitle>
-                <img
-                    src={DataDetail.titleImg}
-                    alt={DataDetail.title}
-                />
-
-
-            </ImageTitle>
-            <ContentMeta>
-                <Controls>
-
-                        <Player onClick={()=>{history("/video/" + id)}}>
-
-                            <img src="/images/play-icon-black.png"/>
-                            <span>Play</span>
-                        </Player>
-
-                    <Trailer>
-                        <img src="/images/play-icon-white.png"/>
-                        <span>Trailer</span>
-
-                    </Trailer>
-                    <AddList>
-                        {onWatchListStatus?
-                            (<BookmarkRemoveIcon onClick={()=>addToWatchlist(id)} sx={{color:white}}/>)
-                            :
-                            (<AddIcon onClick={()=>addToWatchlist(id)} sx={{color:white}}/>)}
-
-                    </AddList>
-                    <GroupWatch>
-                        <img src="/images/group-icon.png" />
-                    </GroupWatch>
-                    <Like onClick={()=>
-                    { changeStatusLogic(DataDetail.likes);
-                    }}
-                    >
-                         {likeStatus ? (<ThumbUpIcon sx={{color:white}}/>):(<ThumbUpOffAltIcon sx={{color:white}}/>)}
-
-                    </Like>
-
-                </Controls>
-                <Subtitle>
-                    {DataDetail.subTitle}
-                </Subtitle>
-
-                <Description>
-                    {DataDetail.description}
-                </Description>
-            </ContentMeta>
-        </Container>
-    );
+        <Description>{DataDetail.description}</Description>
+      </ContentMeta>
+    </Container>
+  );
 }
 
-const Container=styled.div`
-
-    position: relative;
-    min-height: (100vh-250px);
-    overflow: hidden;
-    display: block;
-    top:72px; 
-    padding: 0 (3.5vw+5px);
-  @media(max-width: 768px)
-  {
-    margin-top:10vh ;
+const Container = styled.div`
+  position: relative;
+  min-height: (100vh-250px);
+  overflow: hidden;
+  display: block;
+  top: 72px;
+  padding: 0 (3.5vw+5px);
+  @media (max-width: 768px) {
+    margin-top: 10vh;
   }
-    
 `;
 
-const Background=styled.div`
-    left: 0px;
+const Background = styled.div`
+  left: 0px;
   opacity: 0.8;
   position: fixed;
   right: 0px;
-  top:0px;
+  top: 0px;
   z-index: -1;
-  
-  img{
+
+  img {
     height: 100%;
     width: 100%;
   }
-  @media(max-width: 768px){
+  @media (max-width: 768px) {
     width: initial;
     margin-top: 5vh;
-    img{
-      margin-top:10vh ;
+    img {
+      margin-top: 10vh;
     }
   }
-
 `;
 
-const ImageTitle=styled.div`
-    align-items: flex-end;
-    display: flex;
+const ImageTitle = styled.div`
+  align-items: flex-end;
+  display: flex;
   -webkit-box-pack: start;
-  justify-content:flex-start;
+  justify-content: flex-start;
   margin: 0px auto;
   height: 30vw;
-  min-height:170px ;
+  min-height: 170px;
   padding-bottom: 24px;
   width: 100%;
-  img{
+  img {
     max-width: 600px;
     min-width: 200px;
     width: 35vw;
   }
   @media (max-width: 768px) {
-    img{
+    img {
       max-width: 600px;
       min-width: 200px;
       width: 35vw;
       margin-top: 20vh;
     }
   }
-
 `;
 
 const ContentMeta = styled.div`
   max-width: 874px;
-  
 `;
 
 const Controls = styled.div`
@@ -286,7 +250,7 @@ const Player = styled.button`
   letter-spacing: 1.8px;
   text-align: center;
   text-transform: uppercase;
-  background: rgb(249,249,249);
+  background: rgb(249, 249, 249);
   border: none;
   color: rgb(0, 0, 0);
   img {
@@ -311,13 +275,9 @@ const Trailer = styled(Player)`
   color: rgb(249, 249, 249);
   margin-left: 0;
   &:hover {
-    background: rgba(0, 0, 0,0.5);
+    background: rgba(0, 0, 0, 0.5);
   }
 `;
-
-
-
-
 
 const AddList = styled.button`
   margin-top: 0;
@@ -337,42 +297,17 @@ const AddList = styled.button`
     opacity: 0.9;
     scale: 1.07;
     background-color: #194545;
-
-
   }
-
 
   span {
     background-color: rgb(249, 249, 249);
     display: inline-block;
-    //&:first-child {
-    //  height: 2px;
-    //  transform: translate(1px, 0px) rotate(0deg);
-    //  width: 16px;
-    // 
-    //  
-    //}
-    //&:nth-child(2) {
-    //  height: 16px;
-    //  transform: translateX(-8px) rotate(0deg);
-    //  width: 2px;
-    //  
-    //}
   }
 `;
-const GroupWatch=styled(AddList)`
+const GroupWatch = styled(AddList)``;
+const Like = styled(AddList)``;
 
-
-
-`;
-const Like=styled(AddList)`
-  
-
-
-
-`;
-
-const Subtitle=styled.div`
+const Subtitle = styled.div`
   color: rgb(249, 249, 249);
   font-size: 15px;
   min-height: 20px;
@@ -380,10 +315,9 @@ const Subtitle=styled.div`
   @media (max-width: 768px) {
     font-size: 12px;
   }
-
 `;
 
-const Description=styled.div`
+const Description = styled.div`
   line-height: 1.4;
   font-size: 20px;
   padding: 16px 0px;
@@ -392,7 +326,6 @@ const Description=styled.div`
   @media (max-width: 768px) {
     font-size: 14px;
   }
-
 `;
 
 export default Detail;

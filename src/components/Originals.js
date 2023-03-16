@@ -13,7 +13,7 @@ function Originals(props) {
         <Container>
             {/*<h4>Originals</h4>*/}
 
-            <h4>{liked[0]}</h4>
+            <h4>Originals</h4>
             <Content>
 
                 {

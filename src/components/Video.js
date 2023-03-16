@@ -35,7 +35,7 @@ function Video(props) {
                    sx={{height:"100%", width:"100%",margin:"0%",
                        animationPlayState:"none",
                        opacity:"75%",
-                       border:"solid",
+
 
                    position:"absolute"}}    />
 

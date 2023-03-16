@@ -13,7 +13,6 @@ import {setMovies} from "./moviestowatch/movieSlice";
 import {selectUsername, selectUserPhoto} from "./user/userSlice";
 import {useDispatch, useSelector} from "react-redux";
 
-import {doc, getDocs, setDoc} from "firebase/firestore";
 
 import { onSnapshot, collection } from 'firebase/firestore';
 
@@ -30,7 +29,7 @@ function Home(props) {
     let originals=[];
     let trending=[];
     let allMovies=[]
-    //console.log(db);
+
     let array=[];
 
 
