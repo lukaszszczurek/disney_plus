@@ -1,17 +1,17 @@
-## React disney plus app 
+# React disney plus app 
 App based on popular streaming service. 
-# React 
+### React 
 DOM, Hooks, JSX components, CSS styling
-# Redux
+### Redux
 Slice, manage data using Redux
-# MUI & styled Components
+### MUIs
 Cards, material Icons, API Components, sx
-# Styled Components
+### Styled Components
 styling, modern CSS using styled Components
-# Firebase
+### Firebase
 Google authentication, firestore database, Google cloud, no SQL database architecture, hosting
 
 
 
-## Direct Link
+# Direct Link
 https://disneyplus-cloneoff.web.app
