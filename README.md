@@ -1,6 +1,10 @@
 ## React disney plus app 
 App based on popular streaming service. 
-Created with firebase, redux, mui.
+# React
+# Redux
+# MUI
+# Firebase
+
 
 ## Direct Link
 https://disneyplus-cloneoff.web.app
