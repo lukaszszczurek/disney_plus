@@ -15,14 +15,10 @@ function RatingsData(props) {
   const useQuerr = useSelector(selectQuery);
   console.log("movies" + movies);
 
-
-
   useEffect(() => {});
 
   return (
     <div>
-
-
       <Content>
         {useQuerr &&
           useQuerr.map((movie, key) => (
@@ -80,22 +76,18 @@ function RatingsData(props) {
                     },
                   }}
                 />
-
               </CardMedia>
             </Link>
           ))}
       </Content>
-
     </div>
   );
 }
 
 export default RatingsData;
 
-
-
 const Content = styled.div`
-    padding: 1px;
+  padding: 1px;
 `;
 
 const Wrap = styled.div`
@@ -119,7 +111,7 @@ const Wrap = styled.div`
     padding-left: 8%;
     justify-content: center;
     padding-top: 0%;
-    
+
     opacity: 1;
     position: absolute;
     transition: opacity 500ms ease-in-out 0s;

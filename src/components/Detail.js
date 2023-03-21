@@ -13,13 +13,10 @@ import {
 } from "firebase/firestore";
 import db from "../firebase";
 
-
-
 import "firebase/firestore";
 import "firebase/auth";
 
-
-import {FacebookShareButton} from "react-share";
+import { FacebookShareButton } from "react-share";
 // icons
 import AddIcon from "@mui/icons-material/Add";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
@@ -41,11 +38,13 @@ function Detail(props) {
   const ListToWatch = useSelector(selectWatchList);
   const UserId = useSelector(selectIdUserData);
 
+  console.log("DEF: " + UserId);
+
   const history = useNavigate();
   const [displayMovie, setDisplayMovie] = useState(false);
   const [DataDetail, SetDataDetail] = useState(false);
 
-  const href= window.location.href;
+  const href = window.location.href;
 
   // like logic
 
@@ -63,9 +62,9 @@ function Detail(props) {
       const editField = { likes: currentNumber + 1 };
       updateDoc(movieDoc, editField);
 
+      console.log("ud ID : " + UserId);
       const userDataDoc = doc(db, "userData", UserId);
       updateDoc(userDataDoc, { liked: arrayUnion(id) });
-
     }
     setLikeStatus(!likeStatus);
   };
@@ -112,7 +111,6 @@ function Detail(props) {
 
   return (
     <Container>
-
       <Background>
         <img src={DataDetail.backgroundImg} alt={DataDetail.title} />
       </Background>
@@ -149,13 +147,10 @@ function Detail(props) {
             )}
           </AddList>
 
-          <FacebookShareButton url={href}
-          >
+          <FacebookShareButton url={href}>
             <GroupWatch>
-
               <img src="/images/group-icon.png" />
             </GroupWatch>
-
           </FacebookShareButton>
 
           <Like

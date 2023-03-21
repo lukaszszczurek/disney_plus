@@ -21,19 +21,19 @@
 // reportWebVitals();
 
 import React from "react";
-import {createRoot} from "react-dom/client";
+import { createRoot } from "react-dom/client";
 import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import store from "./app/store";
-import {Provider} from "react-redux";
-const container=document.getElementById("root");
-const rt=createRoot(container);
+import { Provider } from "react-redux";
+const container = document.getElementById("root");
+const rt = createRoot(container);
 rt.render(
-    <React.StrictMode>
-        <Provider store={store}>
-            <App />
-        </Provider>
-    </React.StrictMode>,
-    //document.getElementById("root")
+  <React.StrictMode>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </React.StrictMode>
+  //document.getElementById("root")
 );
