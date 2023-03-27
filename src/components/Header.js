@@ -12,7 +12,6 @@ import {
   selectUserPhoto,
   setUserLoginDetails,
   setSignOutState,
-  selectLoggedStatus,
 } from "./user/userSlice";
 import {
   collection,
@@ -21,10 +20,12 @@ import {
   setDoc,
   deleteDoc,
 } from "firebase/firestore";
-import { setUserDataDetails } from "./user/UserDataAccess";
+import {
+  setUserDataDetails,
+  signOutProcessDataReset,
+} from "./user/UserDataAccess";
 
 function Header(props) {
-  let [isActuallyNotLogged, setActuallyNotLogged] = useState();
   const dispatch = useDispatch();
   const history = useNavigate();
   const UserName = useSelector(selectUsername);
@@ -32,9 +33,47 @@ function Header(props) {
 
   // dispatch user data
 
-  const userDataAccessLogic = (user) => {
-    setActuallyNotLogged(true);
+  function userDataAccessLogic(user) {
+    let isActuallyNotLogged = true;
+    console.log("##1: " + isActuallyNotLogged);
 
+    //  setActuallyNotLogged(true);
+    onSnapshot(collection(db, "userData"), (snapshot) => {
+      snapshot.docs.forEach((doc) => {
+        if (user.uid === doc.id) {
+          isActuallyNotLogged = false;
+
+          dispatch(
+            setUserDataDetails({
+              id: doc.id,
+              liked: doc.data().liked,
+              watchList: doc.data().watchList,
+            })
+          );
+
+          return;
+        }
+      });
+
+      if (isActuallyNotLogged) {
+        console.log("XDDDWWE");
+        setDoc(doc(db, "userData", user.uid), {
+          liked: [],
+          watchList: [],
+        });
+
+        dispatch(
+          setUserDataDetails({
+            id: user.uid,
+            liked: [],
+            watchList: [],
+          })
+        );
+      }
+    });
+  }
+
+  const setData = (user) => {
     onSnapshot(collection(db, "userData"), (snapshot) => {
       snapshot.docs.forEach((doc) => {
         if (user.uid === doc.id) {
@@ -45,37 +84,19 @@ function Header(props) {
               watchList: doc.data().watchList,
             })
           );
-          setActuallyNotLogged(false);
         }
       });
     });
-
-    if (isActuallyNotLogged) {
-      // adding new user data
-      setDoc(doc(db, "userData", user.uid), {
-        liked: [],
-        watchList: [],
-      });
-
-      dispatch(
-        setUserDataDetails({
-          id: user.uid,
-          liked: [],
-          watchList: [],
-        })
-      );
-      setActuallyNotLogged(false);
-    }
   };
 
   useEffect(() => {
     auth.onAuthStateChanged(async (user) => {
       if (user) {
         setUser(user);
-        userDataAccessLogic(user);
+        setData(user);
       }
     });
-    deleteDoc(doc(db, "userData", "9wwranOutqZ4Z7mEKHAz7djaunn2"));
+    // deleteDoc(doc(collection(db,'userData', 'jFNaI6Sfzee59Z5u8kkA4wLHgmQ2')))
   }, []);
 
   const setUser = (user) => {
@@ -96,7 +117,7 @@ function Header(props) {
           setUser(result.user);
           userDataAccessLogic(result.user);
 
-          setActuallyNotLogged = false;
+          // setActuallyNotLogged = false;
 
           history("/home");
         })
@@ -108,6 +129,7 @@ function Header(props) {
         .signOut()
         .then(() => {
           dispatch(setSignOutState());
+          dispatch(signOutProcessDataReset());
           history("/");
         })
         .catch((err) => alert(err.message));

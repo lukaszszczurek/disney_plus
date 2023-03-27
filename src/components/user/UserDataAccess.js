@@ -22,8 +22,8 @@ import {createSlice} from "@reduxjs/toolkit";
 
          signOutProcessDataReset:(state)=>{
              state.id=null;
-             state.liked=null;
-             state.watchList=null;
+             state.liked=[];
+             state.watchList=[];
 
          },
      }
