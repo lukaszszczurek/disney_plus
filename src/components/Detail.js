@@ -3,8 +3,6 @@ import styled from "styled-components";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   collection,
-  getDocs,
-  setDoc,
   doc,
   updateDoc,
   onSnapshot,
@@ -37,18 +35,10 @@ function Detail(props) {
   const Liked = useSelector(selectLiked);
   const ListToWatch = useSelector(selectWatchList);
   const UserId = useSelector(selectIdUserData);
-  console.log("ud ID : " + UserId);
-  let ID = UserId;
-  console.log("IDS: " + ID)
-
-
-
 
 
   const history = useNavigate();
-  const [displayMovie, setDisplayMovie] = useState(false);
   const [DataDetail, SetDataDetail] = useState(false);
-
   const href = window.location.href;
 
   // like logic
@@ -66,7 +56,6 @@ function Detail(props) {
       const movieDoc = doc(db, "movies", id);
       const editField = { likes: currentNumber + 1 };
       updateDoc(movieDoc, editField);
-
 
       const userDataDoc = doc(db, "userData", UserId);
       updateDoc(userDataDoc, { liked: arrayUnion(id) });
@@ -93,7 +82,6 @@ function Detail(props) {
 
   useEffect(() => {
 
-    console.log("ID: " + UserId)
     onSnapshot(collection(db, "movies"), (snapshot) => {
       snapshot.docs.forEach((doc) => {
         if (doc.id === id) {
@@ -104,8 +92,6 @@ function Detail(props) {
   }, [id]);
 
   useEffect(() => {
-
-
     for (let i = 0; i < Liked.length; i++) {
       if (Liked[i] === id) {
         setLikeStatus(true);
@@ -116,74 +102,69 @@ function Detail(props) {
         setonWatchList(true);
       }
     }
-
-
-
-
-
-  }, [Liked,ListToWatch]);
+  }, [Liked, ListToWatch]);
 
   return (
-      <Container>
-        <Background>
-          <img src={DataDetail.backgroundImg} alt={DataDetail.title} />
-        </Background>
+    <Container>
+      <Background>
+        <img src={DataDetail.backgroundImg} alt={DataDetail.title} />
+      </Background>
 
-        <ImageTitle>
-          <img src={DataDetail.titleImg} alt={DataDetail.title} />
-        </ImageTitle>
-        <ContentMeta>
-          <Controls>
-            <Player
-                onClick={() => {
-                  history("/video/" + id);
-                }}
-            >
-              <img src="/images/play-icon-black.png" />
-              <span>Play</span>
-            </Player>
+      <ImageTitle>
+        <img src={DataDetail.titleImg} alt={DataDetail.title} />
+      </ImageTitle>
+      <ContentMeta>
+        <Controls>
+          <Player
+            onClick={() => {
+              history("/video/" + id);
+            }}
+          >
+            <img src="/images/play-icon-black.png" />
+            <span>Play</span>
+          </Player>
 
-            <Trailer>
-              <img src="/images/play-icon-white.png" />
-              <span>Trailer</span>
-            </Trailer>
-            <AddList>
-              {onWatchListStatus ? (
-                  <BookmarkRemoveIcon
-                      onClick={() => addToWatchlist(id)}
-                      sx={{ color: white }}
-                  />
-              ) : (
-                  <AddIcon
-                      onClick={() => addToWatchlist(id)}
-                      sx={{ color: white }}
-                  />
-              )}
-            </AddList>
+          <Trailer>
+            <img src="/images/play-icon-white.png" />
+            <span>Trailer</span>
+          </Trailer>
+          <AddList>
+            {onWatchListStatus ? (
+              <BookmarkRemoveIcon
+                onClick={() => addToWatchlist(id)}
+                sx={{ color: white }}
+              />
+            ) : (
+              <AddIcon
+                onClick={() => addToWatchlist(id)}
+                sx={{ color: white }}
+              />
+            )}
+          </AddList>
 
-            <FacebookShareButton url={href}>
-              <GroupWatch>
-                <img src="/images/group-icon.png" />
-              </GroupWatch>
-            </FacebookShareButton>
+          <FacebookShareButton url={href}>
+            <GroupWatch>
+              <img src="/images/group-icon.png" />
+            </GroupWatch>
+          </FacebookShareButton>
 
-            <Like
-                onClick={() => {
-                  changeStatusLogic(DataDetail.likes);
-                }}
-            >
-              {likeStatus ? (
-                  <ThumbUpIcon sx={{ color: white }} />
-              ) : (
-                  <ThumbUpOffAltIcon sx={{ color: white }} />
-              )}
-            </Like>
-          </Controls>
-          <Subtitle>{DataDetail.subTitle}</Subtitle>
+          <Like
+            onClick={() => {
+              changeStatusLogic(DataDetail.likes);
+            }}
+          >
+            {likeStatus ? (
+              <ThumbUpIcon sx={{ color: white }} />
+            ) : (
+              <ThumbUpOffAltIcon sx={{ color: white }} />
+            )}
+          </Like>
+        </Controls>
+        <Subtitle>{DataDetail.subTitle}</Subtitle>
 
-          <Description>{DataDetail.description}</Description>
-        </ContentMeta>
-      </Container>
+        <Description>{DataDetail.description}</Description>
+      </ContentMeta>
+    </Container>
   );
 }
 
